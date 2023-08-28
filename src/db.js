@@ -26,7 +26,7 @@ fs.readdirSync(path.join(__dirname, "/models"))
     modelDefiners.push(require(path.join(__dirname, "/models", file)));
   });
 
-/* modelDefiners.forEach((model) => model(sequelize));
+modelDefiners.forEach((model) => model(sequelize));
 
 let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map((entry) => [
@@ -42,7 +42,7 @@ User.belongsToMany(Song, { through: "user_song" });
 Song.belongsToMany(Playlist, { through: "song_playlist" });
 Playlist.belongsToMany(User, { through: "playlist_user" });
 Song.belongsTo(User, { through: "user_song" });
-Playlist.belongsToMany(Song, { through: "song_playlist" }); */
+Playlist.belongsToMany(Song, { through: "song_playlist" });
 
 module.exports = {
   sequelize,
