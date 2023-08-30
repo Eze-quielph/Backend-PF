@@ -22,7 +22,7 @@ class DataService {
             password,
             email,
           };
-          userPromise.push(User.create(newSong));
+          userPromise.push(User.create(newUser));
         }
       }
 
