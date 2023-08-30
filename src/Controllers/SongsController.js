@@ -38,7 +38,7 @@ class SongsControllers {
   updateSong = async(id, name, description, artist, genre, image)=>{
     try {
         const existingSong = await Song.findByPk(id);
-
+        console.log(name, description, artist, genre, image);
         if (name) existingSong.name = name;
         if (description) existingSong.description = description;
         if (artist) existingSong.artist = artist;

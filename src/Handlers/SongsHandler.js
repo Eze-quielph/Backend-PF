@@ -41,6 +41,7 @@ class SongsHandler {
     const { id } = req.params
 
     try {
+        console.log(req.body)
         const result = await songController.updateSong(id, name, description, artist, genre, image);
         res.status(200).json({result: result})
     } catch (error) {
