@@ -3,7 +3,7 @@ const { Op } = require("sequelize");
 
 class UserController {
   constructor() {}
-
+  //cambios
   getUsers = async () => {
     // console.log("estas en el controller de users");
     return await User.findAll();
