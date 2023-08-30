@@ -47,13 +47,9 @@ class SongsHandler {
 
     try {
       if (imagePath) {
-        // Sube la imagen a Cloudinary y espera la respuesta
         const data = await uploadFIle.uploadImage(imagePath);
-        console.log(data);
-        // Si hay un error en la subida, usa la ruta local
         const newImage = data.error ? imagePath : data;
 
-        // Llama a songController para actualizar la canción
         const result = await songController.updateSong(
           id,
           name,
@@ -65,7 +61,6 @@ class SongsHandler {
 
         res.status(200).json({ result: result });
       } else {
-        // Si no se proporcionó una nueva imagen, actualiza sin cambiar la imagen
         const result = await songController.updateSong(
           id,
           name,
@@ -76,6 +71,36 @@ class SongsHandler {
 
         res.status(200).json({ result: result });
       }
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+
+  postSound = async (req, res) => {
+    const { name, description, artist, genre } = req.body;
+    const files = req.files;
+    console.log(files);
+    try {
+      const uploadedImage = await uploadFIle.uploadImage(
+        req.files.image[0].path
+      );
+      const uploadedSound = await uploadFIle.uploadSound(
+        req.files.sound[0].path
+      );
+
+      const image = uploadedImage
+      const song = uploadedSound;
+        console.log(image, song);
+      const result = await songController.postSong(
+        name,
+        description,
+        artist,
+        genre,
+        image,
+        song
+      );
+
+      res.status(200).json({ result: result });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }

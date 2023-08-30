@@ -17,7 +17,9 @@ class SongsControllers {
 
   getByName = async (name) => {
     try {
-      const data = await Song.findAll({ where: { name } });
+      const data = await Song.findAll({
+        where: { name: { [Op.iLike]: `%${name}%` } },
+      });
       if (!data) throw new Error("No existe cancion con ese nombre");
       return data;
     } catch (error) {
@@ -35,22 +37,43 @@ class SongsControllers {
     }
   };
 
-  updateSong = async(id, name, description, artist, genre, newImage)=>{
+  updateSong = async (id, name, description, artist, genre, newImage) => {
     try {
-        const existingSong = await Song.findByPk(id);
-        console.log(name, description, artist, genre, newImage);
-        if (name) existingSong.name = name;
-        if (description) existingSong.description = description;
-        if (artist) existingSong.artist = artist;
-        if (genre) existingSong.genre = genre;
-        if (newImage) existingSong.image = newImage;
+      const existingSong = await Song.findByPk(id);
+      if (name) existingSong.name = name;
+      if (description) existingSong.description = description;
+      if (artist) existingSong.artist = artist;
+      if (genre) existingSong.genre = genre;
+      if (newImage) existingSong.image = newImage;
 
-        const data = await existingSong.save();
-        return data;
+      const data = await existingSong.save();
+      return data;
     } catch (error) {
-        return error
+      return error;
     }
-  }
+  };
+
+  postSong = async (name, description, artist, genre, image, song) => {
+    try {
+      const existingSongName = await Song.findOne({ where: { name } });
+      if (existingSongName)
+        throw new Error("Ya existe una canción con ese nombre");
+
+      console.log(image, song);
+      const data = await Song.create({
+        name: name,
+        description: description,
+        artist: artist,
+        genre: genre,
+        song: song,
+        image: image,
+      });
+
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
 }
 
 module.exports = SongsControllers;

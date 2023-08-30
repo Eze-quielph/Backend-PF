@@ -6,9 +6,9 @@ const songsHandler = new SongsHandler();
 
 const upload = multer({ dest: 'uploads/' });
 
-
 songRouter.get('/', songsHandler.getSong) //Get All || Username
 songRouter.get('/:id', songsHandler.getById) //Get by Id
 songRouter.put('/:id', upload.single('file'), songsHandler.updateSong) // name | description | genre | artist | image
+songRouter.post('/post',  upload.fields([{ name: 'image', maxCount: 1 }, { name: 'sound', maxCount: 1 }]), songsHandler.postSound) // name | description | genre | artist | image | sound
 
 module.exports = songRouter 
