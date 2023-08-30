@@ -1,5 +1,9 @@
-const SongsHandler = require('./SongsHandler');
+const SongsHandler = require("./SongsHandler");
+const PlaylistsHandler = require("./playlistsHandler");
+const UserHandler = require("./userHandler");
 
 module.exports = {
-    SongsHandler
-}
+  SongsHandler,
+  UserHandler,
+  PlaylistsHandler,
+};

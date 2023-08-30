@@ -1,6 +1,11 @@
-const songRouter = require('./Song.routes')
-const  mainRouter = require('express').Router()
+const mainRouter = require("express").Router();
 
-mainRouter.use('/song', songRouter)
+const usersRouter = require("./users.routes");
+const songRouter = require("./Song.routes");
+const playlistsRouter = require("./playlists.routes");
 
-module.exports = mainRouter
+mainRouter.use("/users", usersRouter);
+mainRouter.use("/song", songRouter);
+mainRouter.use("/playlists", playlistsRouter);
+
+module.exports = mainRouter;

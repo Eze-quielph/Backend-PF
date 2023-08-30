@@ -8,7 +8,6 @@ const DataService = require("./src/Services/LoadDb");
 const { songs, users } = require("./src/Services/data");
 const dataService = new DataService(songs, users);
 
-
 app.listen(PORT, () => {
   sequelize.sync({ force: true }).then(() => {
     dataService.initialDate().catch((error) => {
