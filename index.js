@@ -10,7 +10,7 @@ const dataService = new DataService(songs, users);
 
 
 app.listen(PORT, () => {
-  sequelize.sync({ alter: true }).then(() => {
+  sequelize.sync({ force: true }).then(() => {
     dataService.initialDate().catch((error) => {
       console.log(error);
     });
