@@ -5,13 +5,14 @@ const mainRouter = require("./routes/index.routes");
 
 const app = express();
 
-//Midleware and Cors
+// Middlewares y Cors
+app.use(cors());
 app.disable("x-powered-by");
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
-app.use(cors());
 
-//routes
+// Rutas
 app.use(mainRouter);
 
 module.exports = app;
