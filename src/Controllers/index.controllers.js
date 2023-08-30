@@ -1,5 +1,9 @@
-const SongsControllers = require('./SongsController')
+const SongsControllers = require("./SongsController");
+const UserController = require("./usersControllers");
+const PlaylistsController = require("./playlistsController");
 
 module.exports = {
-    SongsControllers
-}
+  SongsControllers,
+  UserController,
+  PlaylistsController,
+};

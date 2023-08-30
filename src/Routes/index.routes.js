@@ -1,10 +1,11 @@
 const mainRouter = require("express").Router();
 
-// Importo todas las rutas
 const usersRouter = require("./users.routes");
-const songRouter = require('./Song.routes')
+const songRouter = require("./Song.routes");
+const playlistsRouter = require("./playlists.routes");
 
 mainRouter.use("/users", usersRouter);
-mainRouter.use('/song', songRouter)
+mainRouter.use("/song", songRouter);
+mainRouter.use("/playlists", playlistsRouter);
 
-module.exports = mainRouter
+module.exports = mainRouter;
