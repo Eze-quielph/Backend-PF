@@ -1,3 +1,8 @@
-const  mainRouter = require('express').Router()
+const mainRouter = require("express").Router();
 
-module.exports = mainRouter
+// Importo todas las rutas
+const usersRouter = require("./users.routes");
+
+mainRouter.use("/users", usersRouter);
+
+module.exports = mainRouter;
