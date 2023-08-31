@@ -8,7 +8,7 @@ class PlaylistsHandler {
   getPlaylists = async (req, res) => {
     try {
       const allPlaylists = await playlistsController.getPlaylists();
-      /* if (!allPlaylists.length) throw new Error("Playlists aren't available"); */
+      //if (!allPlaylists.length) throw new Error("Playlists aren't available");
       res.status(200).json(allPlaylists);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -41,7 +41,10 @@ class PlaylistsHandler {
   postPlaylist = async (req, res) => {
     const { name, description } = req.body;
     try {
-      const newPlaylist = await playlistsController.postPlaylist(name, description);
+      const newPlaylist = await playlistsController.postPlaylist(
+        name,
+        description
+      );
       if (!newPlaylist) throw new Error("Playlist couldn't be created");
       res.status(201).json(newPlaylist);
     } catch (error) {
@@ -53,7 +56,11 @@ class PlaylistsHandler {
     const { id } = req.params;
     const { name, description } = req.body;
     try {
-      const editedPlaylist = await playlistsController.putPlaylist(name, description, id);
+      const editedPlaylist = await playlistsController.putPlaylist(
+        name,
+        description,
+        id
+      );
       if (!editedPlaylist) throw new Error("Playlist couldn't be modified");
       res.status(200).json(editedPlaylist);
     } catch (error) {
