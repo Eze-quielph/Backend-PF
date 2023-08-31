@@ -8,22 +8,32 @@ class SongsHandler {
   constructor() {}
 
   getSong = async (req, res) => {
-    const { name } = req.query;
-
+    const { genre, artist } = req.query;
+    
     try {
-      const result = await songController.getAll();
-      res.status(200).json({ result: result });
+      if (!genre && !artist) {
+        const result = await songController.getAll();
+        res.status(200).json({ result: result });
+      } else {
+        const resultFiltered = await songController.getAllFiltered(genre, artist);
+        res.status(200).json({ result: resultFiltered });
+      }
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
   };
 
   getByName = async (req, res) => {
-    const { name } = req.query;
+    const { name, genre, artist } = req.query;
 
     try {
-      const result = await songController.getByName(name);
-      res.status(200).json({ result: result });
+      if (!genre && !artist) {
+        const result = await songController.getByName(name);
+        res.status(200).json({ result: result });
+      } else {
+        const resultFiltered = await songController.getByNameFiltered(name, genre, artist);
+        res.status(200).json({ result: resultFiltered });
+      }
     } catch (error) {
       res.status(400).json({ error: error.message });
     }

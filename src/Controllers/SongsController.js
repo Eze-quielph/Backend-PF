@@ -7,6 +7,7 @@ class SongsControllers {
 
   getAll = async () => {
     try {
+      
       const data = await Song.findAll();
       if (!data) throw new Error("No hay nada en la db");
       return data;
@@ -14,14 +15,58 @@ class SongsControllers {
       return error;
     }
   };
+  getAllFiltered = async (genre, artist) => {
+    try {
+      if (genre && artist) {
+        const data = await Song.findAll({
+          where: { genre: { [Op.iLike]: `%${genre}%` }, artist: { [Op.iLike]: `%${artist}%` } },
+        });
+        return data;
+      } else if (genre && !artist) {
+        const data = await Song.findAll({
+          where: { genre: { [Op.iLike]: `%${genre}%` } },
+        });
+        return data;
+      } else {
+        const data = await Song.findAll({
+          where: { artist: { [Op.iLike]: `%${artist}%` } },
+        });
+        return data;
+      }
+    } catch (error) {
+      return error;
+    }
+  };
 
-  getByName = async (name) => {
+  getByName = async (name, genre, artist) => {
     try {
       const data = await Song.findAll({
-        where: { name: { [Op.iLike]: `%${name}%` } },
+        where: { name: { [Op.iLike]: `%${name}%` },  },
       });
       if (!data) throw new Error("No existe cancion con ese nombre");
       return data;
+    } catch (error) {
+      return error;
+    }
+  };
+  getByNameFiltered = async (name, genre, artist) => {
+    try {
+      if (genre && artist) {
+        const data = await Song.findAll({
+          where: { name: { [Op.iLike]: `%${name}%` }, genre: { [Op.iLike]: `%${genre}%` }, artist: { [Op.iLike]: `%${artist}%` } },
+        });
+        return data;
+      } else if (genre && !artist) {
+        const data = await Song.findAll({
+          where: { name: { [Op.iLike]: `%${name}%` }, genre: { [Op.iLike]: `%${genre}%` } },
+        });
+        return data;
+      } else {
+        const data = await Song.findAll({
+          where: { name: { [Op.iLike]: `%${name}%` }, artist: { [Op.iLike]: `%${artist}%` } },
+        });
+        return data;
+      }
     } catch (error) {
       return error;
     }
