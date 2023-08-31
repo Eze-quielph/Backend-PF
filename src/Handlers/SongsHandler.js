@@ -43,40 +43,35 @@ class SongsHandler {
   updateSong = async (req, res) => {
     const { name, description, artist, genre } = req.body;
     const { id } = req.params;
-
+  
     const file = req.file;
-    const imagePath = file.path;
-
+    let newImage;
+  
     try {
-      if (imagePath) {
+      if (file) {
+        const imagePath = file.path;
         const data = await uploadFIle.uploadImage(imagePath);
-        const newImage = data.error ? imagePath : data;
-
-        const result = await songController.updateSong(
-          id,
-          name,
-          description,
-          artist,
-          genre,
-          newImage
-        );
-
-        res.status(200).json({ result: result });
-      } else {
-        const result = await songController.updateSong(
-          id,
-          name,
-          description,
-          artist,
-          genre
-        );
-
-        res.status(200).json({ result: result });
+        if (data.error) {
+          newImage = imagePath;
+        } else {
+          newImage = data;
+        }
       }
+  
+      const result = await songController.updateSong(
+        id,
+        name,
+        description,
+        artist,
+        genre,
+        newImage
+      );
+      res.status(200).json({ result: result });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
   };
+  
 
   postSound = async (req, res) => {
     const { name, description, artist, genre } = req.body;
