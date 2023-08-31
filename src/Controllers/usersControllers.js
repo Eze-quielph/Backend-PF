@@ -20,14 +20,12 @@ class UserController {
     return userId;
   };
 
-  postUser = async (username, email, password) => {
-    return await User.create({ username, email, password });
+  postUser = async (username, email, password, image) => {
+    return await User.create({ username, email, password, image });
   };
   deleteUser = async (id) => {
     const deleteUser = await User.findByPk(id);
-
     const respuesDelete = await deleteUser.destroy();
-
     return respuesDelete;
   };
 }
