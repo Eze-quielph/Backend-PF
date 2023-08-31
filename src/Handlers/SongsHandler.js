@@ -10,20 +10,22 @@ class SongsHandler {
   getSong = async (req, res) => {
     const { name } = req.query;
 
-    if (name) {
-      try {
-        const result = await songController.getByName(name);
-        res.status(200).json({ result: result });
-      } catch (error) {
-        res.status(400).json({ error: error.message });
-      }
-    } else {
-      try {
-        const result = await songController.getAll();
-        res.status(200).json({ result: result });
-      } catch (error) {
-        res.status(400).json({ error: error.message });
-      }
+    try {
+      const result = await songController.getAll();
+      res.status(200).json({ result: result });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+
+  getByName = async (req, res) => {
+    const { name } = req.query;
+
+    try {
+      const result = await songController.getByName(name);
+      res.status(200).json({ result: result });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
     }
   };
 
@@ -88,9 +90,9 @@ class SongsHandler {
         req.files.sound[0].path
       );
 
-      const image = uploadedImage
+      const image = uploadedImage;
       const song = uploadedSound;
-        console.log(image, song);
+      console.log(image, song);
       const result = await songController.postSong(
         name,
         description,
@@ -106,5 +108,4 @@ class SongsHandler {
     }
   };
 }
-
 module.exports = SongsHandler;
