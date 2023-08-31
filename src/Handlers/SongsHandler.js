@@ -51,6 +51,7 @@ class SongsHandler {
       if (file) {
         const imagePath = file.path;
         const data = await uploadFIle.uploadImage(imagePath);
+        console.log(data);
         if (data.error) {
           newImage = imagePath;
         } else {
