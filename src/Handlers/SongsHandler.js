@@ -73,7 +73,6 @@ class SongsHandler {
     }
   };
   
-
   postSound = async (req, res) => {
     const { name, description, artist, genre } = req.body;
     const files = req.files;
@@ -103,5 +102,17 @@ class SongsHandler {
       res.status(400).json({ error: error.message });
     }
   };
+
+  disableSong = async(req, res) => {
+    const {id} = req.params;
+    const {value} = req.body
+
+    try {
+      const result = await songController.disableSong(id, value);
+      res.status(200).json({ result: result });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
 }
 module.exports = SongsHandler;

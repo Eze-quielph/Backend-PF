@@ -53,13 +53,28 @@ class SongsControllers {
     }
   };
 
+  disableSong = async (id, value) => {
+    try {
+      const existingSongName = await Song.findByPk(id);
+      if (!existingSongName) throw new Error("No existe cancion con ese id");
+
+      let bool = value == true ? true : false;
+
+      if (value) existingSongName.isActive = bool;
+      const data = await existingSong.save();
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+
   postSong = async (name, description, artist, genre, image, song) => {
     try {
       const existingSongName = await Song.findOne({ where: { name } });
       if (existingSongName)
         throw new Error("Ya existe una canción con ese nombre");
 
-      console.log(image, song);
+      //console.log(image, song);
       const data = await Song.create({
         name: name,
         description: description,
