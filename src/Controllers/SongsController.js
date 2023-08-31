@@ -5,21 +5,27 @@ const { Op } = require("sequelize");
 class SongsControllers {
   constructor() {}
 
-  getAll = async () => {
+  getAll = async (page, perPage) => {
     try {
-      
-      const data = await Song.findAll();
+      const data = await Song.findAll({
+        offset: (page - 1) * perPage,
+        limit: perPage,
+      });
       if (!data) throw new Error("No hay nada en la db");
       return data;
     } catch (error) {
       return error;
     }
   };
-  getAllFiltered = async (genre, artist) => {
+  getAllFiltered = async (genre, artist, page, perPage) => {
     try {
       if (genre && artist) {
         const data = await Song.findAll({
-          where: { genre: { [Op.iLike]: `%${genre}%` }, artist: { [Op.iLike]: `%${artist}%` } },
+          where: {
+            genre: { [Op.iLike]: `%${genre}%` },
+            artist: { [Op.iLike]: `%${artist}%` },
+          }, offset: (page - 1) * perPage, limit:perPage
+
         });
         return data;
       } else if (genre && !artist) {
@@ -38,10 +44,10 @@ class SongsControllers {
     }
   };
 
-  getByName = async (name, genre, artist) => {
+  getByName = async (name, genre, artist, page, perPage) => {
     try {
       const data = await Song.findAll({
-        where: { name: { [Op.iLike]: `%${name}%` },  },
+        where: { name: { [Op.iLike]: `%${name}%` } },
       });
       if (!data) throw new Error("No existe cancion con ese nombre");
       return data;
@@ -53,17 +59,27 @@ class SongsControllers {
     try {
       if (genre && artist) {
         const data = await Song.findAll({
-          where: { name: { [Op.iLike]: `%${name}%` }, genre: { [Op.iLike]: `%${genre}%` }, artist: { [Op.iLike]: `%${artist}%` } },
+          where: {
+            name: { [Op.iLike]: `%${name}%` },
+            genre: { [Op.iLike]: `%${genre}%` },
+            artist: { [Op.iLike]: `%${artist}%` },
+          },
         });
         return data;
       } else if (genre && !artist) {
         const data = await Song.findAll({
-          where: { name: { [Op.iLike]: `%${name}%` }, genre: { [Op.iLike]: `%${genre}%` } },
+          where: {
+            name: { [Op.iLike]: `%${name}%` },
+            genre: { [Op.iLike]: `%${genre}%` },
+          },
         });
         return data;
       } else {
         const data = await Song.findAll({
-          where: { name: { [Op.iLike]: `%${name}%` }, artist: { [Op.iLike]: `%${artist}%` } },
+          where: {
+            name: { [Op.iLike]: `%${name}%` },
+            artist: { [Op.iLike]: `%${artist}%` },
+          },
         });
         return data;
       }

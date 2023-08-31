@@ -6,8 +6,10 @@ class PlaylistsHandler {
   constructor() {}
 
   getPlaylists = async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const perPage = parseInt(req.query.perPage) || 5;
     try {
-      const allPlaylists = await playlistsController.getPlaylists();
+      const allPlaylists = await playlistsController.getPlaylists(page, perPage);
       //if (!allPlaylists.length) throw new Error("Playlists aren't available");
       res.status(200).json(allPlaylists);
     } catch (error) {
@@ -28,9 +30,11 @@ class PlaylistsHandler {
 
   getPlaylistByName = async (req, res) => {
     const { name } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const perPage = parseInt(req.query.perPage) || 5;
     try {
       if (!name) throw new Error("Name not entered");
-      const searchByName = await playlistsController.getPlaylistByName(name);
+      const searchByName = await playlistsController.getPlaylistByName(name, page, perPage);
       if (!searchByName.length) throw new Error("Playlist not found");
       res.status(200).json(searchByName);
     } catch (error) {
