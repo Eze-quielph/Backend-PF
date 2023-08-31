@@ -10,39 +10,43 @@ class SongsHandler {
   getSong = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const perPage = parseInt(req.query.perPage) || 5;
-
     const { genre, artist } = req.query;
-    
+  
     try {
+      let result;
+      
       if (!genre && !artist) {
-        const result = await songController.getAll(page, perPage);
-        res.status(200).json({ result: result });
+        result = await songController.getAll(page, perPage);
       } else {
-        const resultFiltered = await songController.getAllFiltered(genre, artist);
-        res.status(200).json({ result: resultFiltered });
+        result = await songController.getAllFiltered(genre, artist, page, perPage);
       }
+  
+      res.status(200).json({ result });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
   };
-
+  
   getByName = async (req, res) => {
-    const { name, genre, artist } = req.query;
     const page = parseInt(req.query.page) || 1;
     const perPage = parseInt(req.query.perPage) || 5;
-
+    const { name, genre, artist } = req.query;
+  
     try {
+      let result;
+  
       if (!genre && !artist) {
-        const result = await songController.getByName(name, page, perPage);
-        res.status(200).json({ result: result });
+        result = await songController.getByName(name, page, perPage);
       } else {
-        const resultFiltered = await songController.getByNameFiltered(name, genre, artist);
-        res.status(200).json({ result: resultFiltered });
+        result = await songController.getByNameFiltered(name, genre, artist, page, perPage);
       }
+  
+      res.status(200).json({ result });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
   };
+  
 
   getById = async (req, res) => {
     const { id } = req.params;
