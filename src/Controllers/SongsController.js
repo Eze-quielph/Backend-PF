@@ -38,10 +38,10 @@ class SongsControllers {
     }
   };
 
-  getByName = async (name, genre, artist) => {
+  getByName = async (name, genre, artist, page, perPage) => {
     try {
       const data = await Song.findAll({
-        where: { name: { [Op.iLike]: `%${name}%` },  },
+        where: { name: { [Op.iLike]: `%${name}%` },},
       });
       if (!data) throw new Error("No existe cancion con ese nombre");
       return data;
