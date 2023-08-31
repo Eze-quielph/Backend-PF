@@ -8,11 +8,14 @@ class SongsHandler {
   constructor() {}
 
   getSong = async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const perPage = parseInt(req.query.perPage) || 5;
+
     const { genre, artist } = req.query;
     
     try {
       if (!genre && !artist) {
-        const result = await songController.getAll();
+        const result = await songController.getAll(page, perPage);
         res.status(200).json({ result: result });
       } else {
         const resultFiltered = await songController.getAllFiltered(genre, artist);
@@ -25,10 +28,12 @@ class SongsHandler {
 
   getByName = async (req, res) => {
     const { name, genre, artist } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const perPage = parseInt(req.query.perPage) || 5;
 
     try {
       if (!genre && !artist) {
-        const result = await songController.getByName(name);
+        const result = await songController.getByName(name, page, perPage);
         res.status(200).json({ result: result });
       } else {
         const resultFiltered = await songController.getByNameFiltered(name, genre, artist);
@@ -53,10 +58,10 @@ class SongsHandler {
   updateSong = async (req, res) => {
     const { name, description, artist, genre } = req.body;
     const { id } = req.params;
-  
+
     const file = req.file;
     let newImage;
-  
+
     try {
       if (file) {
         const imagePath = file.path;
@@ -68,7 +73,7 @@ class SongsHandler {
           newImage = data;
         }
       }
-  
+
       const result = await songController.updateSong(
         id,
         name,
@@ -82,7 +87,7 @@ class SongsHandler {
       res.status(400).json({ error: error.message });
     }
   };
-  
+
   postSound = async (req, res) => {
     const { name, description, artist, genre } = req.body;
     const files = req.files;
@@ -113,9 +118,9 @@ class SongsHandler {
     }
   };
 
-  disableSong = async(req, res) => {
-    const {id} = req.params;
-    const {value} = req.body
+  disableSong = async (req, res) => {
+    const { id } = req.params;
+    const { value } = req.body;
 
     try {
       const result = await songController.disableSong(id, value);
@@ -123,6 +128,6 @@ class SongsHandler {
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
-  }
+  };
 }
 module.exports = SongsHandler;

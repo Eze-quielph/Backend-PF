@@ -5,10 +5,10 @@ const { Op } = require("sequelize");
 class SongsControllers {
   constructor() {}
 
-  getAll = async () => {
+  getAll = async (page, perPage) => {
     try {
-      
-      const data = await Song.findAll();
+      const data = await Song.findAll({offset: (page - 1) * perPage,
+        limit: perPage,});
       if (!data) throw new Error("No hay nada en la db");
       return data;
     } catch (error) {
