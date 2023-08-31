@@ -4,12 +4,9 @@ const { Op } = require("sequelize");
 class PlaylistsController {
   constructor(){}
 
-  getPlaylists = () => {
-    /* const playlists = await Playlist.findAll();
-    return playlists; */
-    return {
-        message: "Estas son todas las playlists"
-    };
+  getPlaylists = async() => {
+    const playlists = await Playlist.findAll();
+    return playlists; 
   };
   
   getPlaylistById = async (id) => {
