@@ -34,22 +34,24 @@ class UserHandler {
 
   postUser = async (req, res) => {
     const { username, email, password } = req.body;
-    const files = req.file;
-    //console.log(files);
-    //console.log(username, email, password);
+    const file = req.file;
+    let newImage;
     try {
-      const imagePatch = files.path;
-      //console.log(imagePatch);
-      const uploadedImage = await uploadFIle.uploadImage(imagePatch);
-      console.log(uploadedImage);
-      const image = uploadedImage;
+      if (file) {
+        const imagePath = file.path;
+        const data = await uploadFIle.uploadImage(imagePath);
+        if (data.error) {
+          newImage = imagePath;
+        } else {
+          newImage = data;
+        }
+      }
       const newUser = await userController.postUser(
         username,
         email,
         password,
-        image
+        newImage
       );
-      console.log(newUser);
       res.status(200).json({ data: newUser });
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -57,7 +59,7 @@ class UserHandler {
   };
 
   putUser = async (req, res) => {
-    //res.send("estas en actualziar del handler");
+   
     const { id } = req.params;
     const { username, email, password } = req.body;
     const file = req.file;
@@ -72,7 +74,6 @@ class UserHandler {
           newImage = data;
         }
       }
-      //const updateuser = await updateuser(id, name, email, password);
       let userId = await User.findByPk(id);
       if (!userId) {
         res.status(400).json({ message: `Id incorrecto` });

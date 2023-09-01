@@ -7,7 +7,6 @@ class UploadFile {
 
   uploadImage = async (image) => {
     return new Promise((resolve, reject) => {
-      //console.log(image);
       postImage.uploader.upload(
         image,
 
@@ -28,7 +27,6 @@ class UploadFile {
               );
               reject(error);
             } else {
-              console.log(result.secure_url);
               console.log("Temp file was deleted " + result.secure_url);
               resolve(result.secure_url);
             }
