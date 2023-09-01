@@ -20,6 +20,7 @@ class SongsHandler {
       await client.get("songs", (err, reply) => {
         if (reply) {
           result = JSON.parse(reply);
+          res.status(200).json({ result: result });
         }
         console.log(err);
       });
@@ -52,6 +53,7 @@ class SongsHandler {
       await client.get(`${name}`, (err, reply) => {
         if (reply) {
           result = JSON.parse(reply);
+          res.status(200).json({ result });
         }
         console.log(err);
       });
@@ -84,6 +86,7 @@ class SongsHandler {
       await client.get(`${id}`, (err, reply) => {
         if (reply) {
           result = JSON.parse(reply);
+          res.status(200).json({ result: result });
         }
         console.log(err);
       });

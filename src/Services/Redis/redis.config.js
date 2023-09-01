@@ -1,8 +1,10 @@
 const { createClient } = require("redis");
 const {promisify} = require('util')
 
+const {REDIS_URL} = process.env
+
 const client = createClient({
-  url: "redis://default:DNSm69MPUGptpSXRc2UK@containers-us-west-166.railway.app:6801",
+  url: REDIS_URL,
 });
 
 const GET_ASYNC = promisify(client.get).bind(client)
