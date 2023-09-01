@@ -3,22 +3,29 @@ const usersRouter = require("express").Router();
 const UserHandler = require("../Handlers/userHandler");
 const userHandler = new UserHandler();
 
+//Middlewares
+const validateIdMiddleware = require("../Middleware/users.playlist/getById.middleware");
+const validateNameMiddleware = require("../Middleware/users.playlist/getById.middleware");
+
 //Files
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
 usersRouter.get("/", userHandler.getUsers);
-usersRouter.get("/:id", userHandler.getUserById);
-usersRouter.delete("/:id", userHandler.deleteUser);
-usersRouter.put("/:id", upload.single("file"), userHandler.putUser);
+usersRouter.get("/name", validateNameMiddleware, userHandler.getUsers);
+usersRouter.get("/:id", validateIdMiddleware, userHandler.getUserById);
+usersRouter.delete("/:id", validateIdMiddleware, userHandler.deleteUser);
+usersRouter.put(
+  "/:id",
+  upload.single("file"),
+  validateIdMiddleware,
+  userHandler.putUser
+);
 usersRouter.post(
   "/",
-  upload.fields([{ name: "image", maxCount: 1 }]),
+  upload.single([{ name: "image", maxCount: 1 }]),
+  validateIdMiddleware,
   userHandler.postUser
 );
-
-// usersRouter.post("/", (req, res) => {
-//   res.send("estas en el post");
-// });
 
 module.exports = usersRouter;

@@ -26,6 +26,7 @@ class UserHandler {
 
     try {
       const data = await userController.getUserById(id);
+      if(!data) throw new Error('no existe user con id')
       res.status(200).json({ result: data });
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -59,7 +60,7 @@ class UserHandler {
   };
 
   putUser = async (req, res) => {
-    // res.send("estas en actualziar del handler");
+    
     const { id } = req.params;
 
     const { username, email, password } = req.body;

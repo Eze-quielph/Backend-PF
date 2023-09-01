@@ -4,11 +4,9 @@ const { Op } = require("sequelize");
 class UserController {
   constructor() {}
   getUsers = async () => {
-    // console.log("estas en el controller de users");
     return await User.findAll();
   };
   getUserByName = async (username) => {
-    // console.log("estas en el controller de users");
     const databaseUser = await User.findAll({
       where: { username: { [Op.iLike]: `%${username}%` } },
     });
