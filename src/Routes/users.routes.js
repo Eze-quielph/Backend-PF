@@ -12,20 +12,13 @@ const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
 usersRouter.get("/", userHandler.getUsers);
-usersRouter.get("/name", validateNameMiddleware, userHandler.getUsers);
-usersRouter.get("/:id", validateIdMiddleware, userHandler.getUserById);
-usersRouter.delete("/:id", validateIdMiddleware, userHandler.deleteUser);
-usersRouter.put(
-  "/:id",
-  upload.single("file"),
-  validateIdMiddleware,
-  userHandler.putUser
-);
-usersRouter.post(
-  "/",
-  upload.single([{ name: "image", maxCount: 1 }]),
-  validateIdMiddleware,
-  userHandler.postUser
-);
+usersRouter.get("/:id", userHandler.getUserById);
+usersRouter.delete("/:id", userHandler.deleteUser);
+usersRouter.post("/", upload.single("file"), userHandler.postUser);
+usersRouter.put("/:id", upload.single("file"), userHandler.putUser);
+
+// usersRouter.post("/", (req, res) => {
+//   res.send("estas en el post");
+// });
 
 module.exports = usersRouter;
