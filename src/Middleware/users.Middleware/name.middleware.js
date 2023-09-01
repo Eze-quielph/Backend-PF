@@ -4,10 +4,10 @@ const startValidate = (req, res, next) => {
 }
 
 const reqName = (req, res, next) => {
-    const { username } = req.params;
+    const { username } = req.query;
 
     if(!username){
-        req.errors.push('Es necesario el ma,e')
+        req.errors.push('Es necesario el name')
         next()
     }
     next()
