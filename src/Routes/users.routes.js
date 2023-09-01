@@ -10,12 +10,8 @@ const upload = multer({ dest: "uploads/" });
 usersRouter.get("/", userHandler.getUsers);
 usersRouter.get("/:id", userHandler.getUserById);
 usersRouter.delete("/:id", userHandler.deleteUser);
+usersRouter.post("/", upload.single("file"), userHandler.postUser);
 usersRouter.put("/:id", upload.single("file"), userHandler.putUser);
-usersRouter.post(
-  "/",
-  upload.fields([{ name: "image", maxCount: 1 }]),
-  userHandler.postUser
-);
 
 // usersRouter.post("/", (req, res) => {
 //   res.send("estas en el post");

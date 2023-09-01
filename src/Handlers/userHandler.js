@@ -34,36 +34,6 @@ class UserHandler {
 
   postUser = async (req, res) => {
     const { username, email, password } = req.body;
-
-    const files = req.files;
-    console.log(files);
-
-    try {
-      const uploadedImage = await uploadFIle.uploadImage(
-        req.files.image[0].path
-      );
-      const image = uploadedImage;
-      console.log(image);
-
-      // const newUser = await postUser(username, email, password);
-      const newUser = await userController.postUser(
-        username,
-        email,
-        password,
-        image
-      );
-      res.status(200).json({ data: newUser });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-
-  putUser = async (req, res) => {
-    // res.send("estas en actualziar del handler");
-    const { id } = req.params;
-
-    const { username, email, password } = req.body;
-
     const file = req.file;
     let newImage;
     try {
@@ -76,12 +46,38 @@ class UserHandler {
           newImage = data;
         }
       }
-      //const updateuser = await updateuser(id, name, email, password);
+      const newUser = await userController.postUser(
+        username,
+        email,
+        password,
+        newImage
+      );
+      res.status(200).json({ data: newUser });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+
+  putUser = async (req, res) => {
+   
+    const { id } = req.params;
+    const { username, email, password } = req.body;
+    const file = req.file;
+    let newImage;
+    try {
+      if (file) {
+        const imagePath = file.path;
+        const data = await uploadFIle.uploadImage(imagePath);
+        if (data.error) {
+          newImage = imagePath;
+        } else {
+          newImage = data;
+        }
+      }
       let userId = await User.findByPk(id);
       if (!userId) {
         res.status(400).json({ message: `Id incorrecto` });
       }
-
       await userId.update({ ...userId, username, email, password, newImage });
       res.status(200).json(userId);
     } catch (error) {

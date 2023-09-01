@@ -1,5 +1,5 @@
 const postImage = require("./PostImage/CloudinaryConfig");
-const postSound = require('./PostMusic/CloudinarySoundOne')
+const postSound = require("./PostMusic/CloudinarySoundOne");
 const fs = require("fs");
 
 class UploadFile {
@@ -9,15 +9,22 @@ class UploadFile {
     return new Promise((resolve, reject) => {
       postImage.uploader.upload(
         image,
+
         { resource_type: "image", folder: "/audiofiles", overwrite: true },
         (error, result) => {
           fs.unlink(image, (deleteErr) => {
             if (deleteErr) {
-              console.error("Error al eliminar el archivo temporal:", deleteErr.message);
+              console.error(
+                "Error al eliminar el archivo temporal:",
+                deleteErr.message
+              );
             }
-  
+
             if (error) {
-              console.error("Error al cargar el archivo en Cloudinary:", error.message);
+              console.error(
+                "Error al cargar el archivo en Cloudinary:",
+                error.message
+              );
               reject(error);
             } else {
               console.log("Temp file was deleted " + result.secure_url);
@@ -28,7 +35,7 @@ class UploadFile {
       );
     });
   };
-  
+
   uploadSound = async (sound) => {
     return new Promise((resolve, reject) => {
       postSound.uploader.upload(
@@ -37,11 +44,17 @@ class UploadFile {
         (error, result) => {
           fs.unlink(sound, (deleteErr) => {
             if (deleteErr) {
-              console.error("Error al eliminar el archivo temporal:", deleteErr.message);
+              console.error(
+                "Error al eliminar el archivo temporal:",
+                deleteErr.message
+              );
             }
-  
+
             if (error) {
-              console.error("Error al cargar el archivo en Cloudinary:", error.message);
+              console.error(
+                "Error al cargar el archivo en Cloudinary:",
+                error.message
+              );
               reject(error);
             } else {
               console.log("Temp file was deleted " + result.secure_url);
@@ -52,7 +65,6 @@ class UploadFile {
       );
     });
   };
-  
 }
 
 module.exports = UploadFile;
