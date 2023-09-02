@@ -5,31 +5,70 @@ const { User } = require("../db");
 const UploadFile = require("../Services/Upload");
 const uploadFIle = new UploadFile();
 
+const { client } = require("../Services/Redis/redis.config");
+
 class UserHandler {
   constructor() {}
-  getUsers = async (req, res) => {
-    const { username } = req.query;
+  async getUsers(req, res) {
     const page = parseInt(req.query.page) || 1;
     const perPage = parseInt(req.query.perPage) || 5;
-
+    let result;
     try {
-      const data = username
-        ? await userController.getUserByName(username, page, perPage)
-        : await userController.getUsers(page, perPage);
+      
+      await client.get("users", (err, reply) => {
+        if (reply) {
+          result = JSON.parse(reply);
+          res.status(200).json({ result: result });
+        }
+        console.log(err);
+      });
+      result = await userController.getUsers(page, perPage);
+      if (!result) throw new Error("No se encontro los datos");
 
-      res.status(200).json(data);
+      await client.setEx("users", 15000, JSON.stringify(result));
+      res.status(200).json({ result: result });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
-  };
+  }
+
+  async getUsersName(req, res) {
+    const { username } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const perPage = parseInt(req.query.perPage) || 5;
+    let result;
+    try {
+      await client.get(`${username}`, (err, reply) => {
+        if (reply) {
+          result = JSON.parse(reply);
+          res.status(200).json({ result: result });
+        }
+        console.log(err);
+      });
+      result = await userController.getUserByName(username, page, perPage);
+      if (!result) throw new Error("No se encontro los datos");
+      await client.setEx(`${username}`, 15000, JSON.stringify(result));
+      res.status(200).json({ result: result });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
 
   getUserById = async (req, res) => {
     const { id } = req.params;
-
+    let result;
     try {
-      const data = await userController.getUserById(id);
-      if (!data) throw new Error("no existe user con id");
-      res.status(200).json({ result: data });
+      await client.get(`${id}`, (err, reply) => {
+        if (reply) {
+          result = JSON.parse(reply);
+          res.status(200).json({ result: result });
+        }
+        console.log(err);
+      });
+      result = await userController.getUserById(id);
+      if (!result) throw new Error("no existe user con id");
+      await client.setEx(`${id}`, 15000, JSON.stringify(result));
+      res.status(200).json({ result: result });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
