@@ -44,7 +44,7 @@ class SongsControllers {
     }
   };
 
-  getByName = async (name, genre, artist, page, perPage) => {
+  getByName = async (name, page, perPage) => {
     try {
       const data = await Song.findAll({
         where: { name: { [Op.iLike]: `%${name}%` } },

@@ -103,16 +103,18 @@ class SongsHandler {
   updateSong = async (req, res) => {
     const { name, description, artist, genre } = req.body;
     const { id } = req.params;
-
+   
     const file = req.file;
     let newImage;
 
+   
     try {
       if (file) {
         const imagePath = file.path;
+     
         const data = await uploadFIle.uploadImage(imagePath);
-        console.log(data);
-        if (data.error) {
+  
+        if (data.length < 15) {
           newImage = imagePath;
         } else {
           newImage = data;
@@ -135,8 +137,7 @@ class SongsHandler {
 
   postSound = async (req, res) => {
     const { name, description, artist, genre } = req.body;
-    const files = req.files;
-    console.log(files);
+
     try {
       const uploadedImage = await uploadFIle.uploadImage(
         req.files.image[0].path
@@ -147,7 +148,7 @@ class SongsHandler {
 
       const image = uploadedImage;
       const song = uploadedSound;
-      console.log(image, song);
+     
       const result = await songController.postSong(
         name,
         description,
