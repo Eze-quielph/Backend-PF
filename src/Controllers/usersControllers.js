@@ -6,6 +6,7 @@ class UserController {
   getUsers = async () => {
     return await User.findAll();
   };
+
   getUserByName = async (username) => {
     const databaseUser = await User.findAll({
       where: { username: { [Op.iLike]: `%${username}%` } },
@@ -21,6 +22,7 @@ class UserController {
   postUser = async (username, email, password, image) => {
     return await User.create({ username, email, password, image });
   };
+
   deleteUser = async (id) => {
     const deleteUser = await User.findByPk(id);
     const respuesDelete = await deleteUser.destroy();

@@ -26,7 +26,7 @@ class UserHandler {
 
     try {
       const data = await userController.getUserById(id);
-      if(!data) throw new Error('no existe user con id')
+      if (!data) throw new Error("no existe user con id");
       res.status(200).json({ result: data });
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -62,7 +62,6 @@ class UserHandler {
   };
 
   putUser = async (req, res) => {
-    
     const { id } = req.params;
     const { username, email, password } = req.body;
     const file = req.file;
