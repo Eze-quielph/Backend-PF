@@ -5,7 +5,6 @@ const playlistsRouter = require("./playlists.routes");
 const loginRouter = require("./login.routes");
 //***************jwt******************** */
 // const validateTokenMiddleware = require("../Middleware/jwt.middleware/verifyToken.middleware");
-// const jwt = require("jsonwebtoken");
 
 //*************************************** */
 mainRouter.use("/users", usersRouter);
