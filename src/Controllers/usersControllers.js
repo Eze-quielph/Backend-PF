@@ -72,6 +72,25 @@ class UserController {
     await user.destroy();
     return { message: "Usuario eliminado correctamente" };
   }
+
+  async restoreUsers (id){
+    try {
+      const user = await User.findByPk(id, {paranoid:false})
+      if(!user){
+        return { message: 'no existe un usuario con ese ID'}
+      }
+      await user.restore();
+      return {
+        result: true,
+        message:"Usuario restaurado correctamente"
+      }
+    } catch (error) {
+      return{
+        result: false,
+        error: error.message
+      }
+    }
+  }
 }
 
 module.exports = UserController;

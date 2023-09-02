@@ -114,18 +114,31 @@ class SongsControllers {
     }
   };
 
-  disableSong = async (id, value) => {
+  async deleteSong (id){
+    const song = await song.findByPk(id);
+    if (!song) {
+      return { message: `No existe un usuario con ese ID` };
+    }
+
+    await song.destroy();
+    return { message: "Usuario eliminado correctamente" };
+  }
+
+  restoreSong = async (id) => {
     try {
-      const existingSongName = await Song.findByPk(id);
-      if (!existingSongName) throw new Error("No existe cancion con ese id");
+      const song = await Song.findByPk(id, {paranoid: false});
+      if (!song)  return { message: 'no existe una cancion con ese ID'}
 
-      let bool = value == true ? true : false;
-
-      if (value) existingSongName.isActive = bool;
-      const data = await existingSong.save();
-      return data;
+      await song.restore();
+       return {
+        result: true,
+        message:"Cancion restaurada correctamente"
+      }
     } catch (error) {
-      return error;
+      return{
+        result: false,
+        error: error.message
+      }
     }
   };
 

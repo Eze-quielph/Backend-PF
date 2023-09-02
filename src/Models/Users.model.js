@@ -22,6 +22,9 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         unique: true,
         allowNull: false,
+        validate: {
+          isEmail: true,
+        },
       },
       premium: {
         type: DataTypes.BOOLEAN,
@@ -31,6 +34,22 @@ module.exports = (sequelize) => {
         type: DataTypes.TEXT,
       },
     },
-    { timestamps: false, freezeTableName: true }
+    {
+      freezeTableName: true,
+      paranoid: true,
+      indexes: [
+        {
+          unique: true,
+          fields: ["id"],
+        },
+        {
+          unique: true,
+          fields: ["email"],
+        },
+        {
+          fields: ["username"],
+        },
+      ],
+    }
   );
 };

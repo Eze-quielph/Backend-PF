@@ -164,13 +164,23 @@ class SongsHandler {
     }
   };
 
-  disableSong = async (req, res) => {
+  async deleteSong (req,res){
     const { id } = req.params;
-    const { value } = req.body;
 
     try {
-      const result = await songController.disableSong(id, value);
-      res.status(200).json({ result: result });
+      const result = await songController.deleteSong(id);
+      res.status(200).json({ result });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+
+  restoreSong = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+      const result = await songController.restoreSong(id);
+      res.status(200).json({ result });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }

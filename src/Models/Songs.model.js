@@ -16,7 +16,7 @@ module.exports = (sequelize) => {
       song: {
         type: DataTypes.TEXT,
         unique: true,
-        allowNull: false
+        allowNull: false,
       },
       description: {
         type: DataTypes.STRING,
@@ -32,13 +32,32 @@ module.exports = (sequelize) => {
       },
       image: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
       },
       isActive: {
         type: DataTypes.BOOLEAN,
-        defaultValue: true
+        defaultValue: true,
       },
     },
-    { timestamps: false, freezeTableName: true }
+    {
+      paranoid: true,
+      freezeTableName: true,
+      indexes: [
+        {
+          unique: true,
+          fields: ["id"],
+        },
+        {
+          unique: true,
+          fields: ["name"],
+        },
+        {
+          fields: ["artist"],
+        },
+        {
+          fields: ["genre"],
+        },
+      ],
+    }
   );
 };

@@ -14,7 +14,6 @@ class UserHandler {
     const perPage = parseInt(req.query.perPage) || 5;
     let result;
     try {
-      
       await client.get("users", (err, reply) => {
         if (reply) {
           result = JSON.parse(reply);
@@ -144,6 +143,17 @@ class UserHandler {
       res.status(400).json({ error: error.message });
     }
   };
+
+  async restoreUserById(req, res) {
+    const { id } = req.params;
+    try {
+      const result = await userController.restoreUsers(id);
+      res.status(200).json({ result: result });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+  
 }
 
 module.exports = UserHandler;

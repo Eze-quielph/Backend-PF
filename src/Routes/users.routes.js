@@ -32,5 +32,7 @@ usersRouter.put(
   validateUpdateMiddleware,
   userHandler.putUser
 );
+usersRouter.get('/restore/:id', validateIdMiddleware, userHandler.restoreUserById);
+
 
 module.exports = usersRouter;
