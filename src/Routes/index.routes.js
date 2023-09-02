@@ -5,7 +5,7 @@ const playlistsRouter = require("./playlists.routes");
 const loginRouter = require("./login.routes");
 //***************jwt******************** */
 // const validateTokenMiddleware = require("../Middleware/jwt.middleware/verifyToken.middleware");
-// const validateTokenMiddle;
+
 //*************************************** */
 mainRouter.use("/users", usersRouter);
 mainRouter.use("/song", songRouter);
