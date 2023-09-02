@@ -4,87 +4,74 @@ const { Op } = require("sequelize");
 
 class UserController {
   constructor() {}
-  getUsers = async () => {
-    try {
-      const data = await User.findAll();
-      return data;
-    } catch (error) {
-      return error;
-    }
-  };
-  getUserByName = async (username) => {
+
+  async getUsers(page, perPage) {
+    const offset = (page - 1) * perPage;
+    return User.findAll({ offset, limit: perPage });
+  }
+
+  getUserByName = async (username, page, perPage) => {
     try {
       const databaseUser = await User.findAll({
-        where: { username: { [Op.iLike]: `%${username}%` } },
+        where: {
+          username: { [Op.iLike]: `%${username}%` },
+        },
+        offset: (page - 1) * perPage,
+        limit: perPage,
       });
-      if (!databaseUser) throw new Error("No existe cancion con ese nombre");
+
+      if (!databaseUser || databaseUser.length === 0) {
+        throw new Error("No existe usuario con ese nombre");
+      }
+
       return databaseUser;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   };
 
-  getUserById = async (id) => {
-    try {
-      const userId = await User.findByPk(id);
-      if (!userId) throw new Error("No existe user con ese id");
-      return userId;
-    } catch (error) {
-      console.log(error);
+  async getUserById(id) {
+    return User.findByPk(id);
+  }
+
+  async putUser(id, username, email, password, image) {
+    const user = await User.findByPk(id);
+    if (!user) {
+      return { message: `No existe un usuario con ese ID` };
     }
-  };
 
-  putUser = async (id, username, email, password, image) => {
-    try {
-      let userId = await User.findByPk(id);
-      if (!userId) {
-        res.status(400).json({ message: `No existe user con ese id` });
-      }
+    const updatedUser = await user.update({ username, email, password, image });
+    return updatedUser;
+  }
 
-      const data = await userId.update({
-        ...userId,
-        username,
-        email,
-        password,
-        image,
-      });
-      return data;
-    } catch (error) {
-      return error;
+  async postUser(username, email, password, image) {
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return {
+        existing: true,
+        message: "Ya existe un usuario con ese email",
+      };
     }
-  };
 
-  postUser = async (username, email, password, image) => {
-    try {
-      const existingUser = await User.findOne({ where: { email } });
-      if (existingUser) {
-        return {
-          existing: true,
-          message: "Ya existe un user con ese email",
-        };
-      }
+    const newUser = await User.create({
+      username,
+      email,
+      password,
+      image,
+    });
 
-      const data = await User.create({
-        username: username,
-        email: email,
-        password: password,
-        image: image,
-      });
+    return newUser;
+  }
 
-      return data;
-    } catch (error) {
-      return error;
+  async deleteUser(id) {
+    const user = await User.findByPk(id);
+    if (!user) {
+      return { message: `No existe un usuario con ese ID` };
     }
-  };
-  deleteUser = async (id) => {
-    try {
-      const deleteUser = await User.findByPk(id);
-      const respuesDelete = await deleteUser.destroy();
-      return respuesDelete;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
+    await user.destroy();
+    return { message: "Usuario eliminado correctamente" };
+  }
 }
 
 module.exports = UserController;
