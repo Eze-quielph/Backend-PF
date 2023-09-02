@@ -7,6 +7,7 @@ class UploadFile {
 
   uploadImage = async (image) => {
     return new Promise((resolve, reject) => {
+      console.log(image);
       postImage.uploader.upload(
         image,
 
@@ -38,6 +39,7 @@ class UploadFile {
 
   uploadSound = async (sound) => {
     return new Promise((resolve, reject) => {
+      console.log(sound);
       postSound.uploader.upload(
         sound,
         { resource_type: "auto", folder: "/audiofiles", overwrite: true },
