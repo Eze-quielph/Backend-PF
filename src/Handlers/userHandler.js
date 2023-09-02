@@ -9,11 +9,13 @@ class UserHandler {
   constructor() {}
   getUsers = async (req, res) => {
     const { username } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const perPage = parseInt(req.query.perPage) || 5;
 
     try {
       const data = username
-        ? await userController.getUserByName(username)
-        : await userController.getUsers();
+        ? await userController.getUserByName(username, page, perPage)
+        : await userController.getUsers(page, perPage);
 
       res.status(200).json(data);
     } catch (error) {
