@@ -16,7 +16,7 @@ const upload = multer({ dest: "uploads/" });
 
 //Routes
 usersRouter.get("/", userHandler.getUsers);
-usersRouter.get("/name", validateNameMiddleware, userHandler.getUsers);
+usersRouter.get("/name", validateNameMiddleware, userHandler.getUsersName);
 usersRouter.get("/:id", validateIdMiddleware, userHandler.getUserById);
 usersRouter.delete("/:id", validateIdMiddleware, userHandler.deleteUser);
 usersRouter.post(
