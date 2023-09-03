@@ -3,6 +3,8 @@ const usersRouter = require("express").Router();
 //Handlers
 const UserHandler = require("../Handlers/userHandler");
 const userHandler = new UserHandler();
+const LoginHandler = require("../Handlers/loginHandler");
+const loginHandler = new LoginHandler();
 
 //Middlewares
 const validateIdMiddleware = require("../Middleware/users.Middleware/getById.middleware");
@@ -20,6 +22,7 @@ usersRouter.get("/",  validateTokenMiddleware, userHandler.getUsers);
 usersRouter.get("/name", validateTokenMiddleware, validateNameMiddleware, userHandler.getUsers);
 usersRouter.get("/:id",validateTokenMiddleware, validateIdMiddleware, userHandler.getUserById);
 usersRouter.delete("/:id", validateTokenMiddleware,validateIdMiddleware, userHandler.deleteUser);
+usersRouter.post("/login", loginHandler.postLogin)
 usersRouter.post(
   "/",
   validateTokenMiddleware,
