@@ -3,22 +3,33 @@ const { User } = require("../db");
 class LoginControllers {
   constructor() {}
 
-  loginPos = async (username, password) => {
-    const user = await User.findOne({
-      where: {
-        username: username,
-        password: password,
-      },
-    });
-    if (user) {
-      jwt.sign({ user }, "secretKey", { expiresIn: "15s" }, (err, token) => {
-        res.json(token);
+  loginPos = async (email, password) => {
+    try {
+      const user = await User.findOne({
+        where: {
+          email: email,
+        },
       });
-    } else {
-      // El usuario no existe en la base de datos
-      res.status(401).json({ message: "Usuario no válido" });
+
+      if (!user) {
+        return {
+          error: "Usuario no encontrado",
+        };
+      }
+
+      // Comparar la contraseña proporcionada con la contraseña almacenada
+      if (user.password !== password) {
+        return {
+          error: "Contraseña incorrecta",
+        };
+      }
+
+      return user;
+    } catch (err) {
+      return {
+        error: "Error interno del servidor",
+      };
     }
-    return user;
   };
 }
 

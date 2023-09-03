@@ -1,46 +1,29 @@
-const LoginControllers = require("../Controllers/login.controllers");
+const jwt = require("jsonwebtoken");
+const { LoginControllers } = require("../Controllers/index.controllers");
 
 const loginControllers = new LoginControllers();
-const { User } = require("../db");
-
-const jwt = require("jsonwebtoken");
 
 class LoginHandler {
   constructor() {}
+
   postLogin = async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.query;
+
     try {
-      const user = await User.findOne({
-        where: {
-          username: username,
-          password: password,
-        },
-      });
-      if (user) {
-        jwt.sign({ user }, "secretKey", { expiresIn: "600s" }, (err, token) => {
-          res.json(token);
-        });
-      } else {
-        res.status(401).json({ message: "Usuario no válido" });
+      const result = await loginControllers.loginPos(email, password);
+ 
+      if (result.error) {
+        return res.status(401).json({ message: result.error });
       }
+
+      const token = jwt.sign({ user: result }, process.env.JWT_SECRET, {
+        expiresIn: "24h",
+      });
+
+      res.json({ token });
     } catch (error) {
-      res.status(403).json({ error: error.message });
+      res.status(500).json({ error: "Error interno del servidor" });
     }
   };
 }
-
-// class LoginHandler {
-//   constructor() {}
-//   postLogin = async (req, res) => {
-//     //res.send("estas en el handler");
-//     const { username, password } = req.body;
-//     try {
-//       const user = await loginControllers.loginPos(username, password);
-//       res.status(200).json(user);
-//     } catch (error) {
-//       res.status(400).json({ error: error.message });
-//     }
-//   };
-// }
-
 module.exports = LoginHandler;
