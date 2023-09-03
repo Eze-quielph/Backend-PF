@@ -1,17 +1,21 @@
 const jwt = require("jsonwebtoken");
-const { LoginControllers } = require("../Controllers/index.controllers");
+const { LoginController } = require("../Controllers/index.controllers");
 
-const loginControllers = new LoginControllers();
+const loginController = new LoginController();
 
 class LoginHandler {
   constructor() {}
 
   postLogin = async (req, res) => {
-    const { email, password } = req.query;
+    const { email, password, thirdPartyLogin } = req.body;
 
     try {
-      const result = await loginControllers.loginPos(email, password);
- 
+      const result = await loginController.loginPost(
+        email,
+        password,
+        thirdPartyLogin
+      );
+
       if (result.error) {
         return res.status(401).json({ message: result.error });
       }
