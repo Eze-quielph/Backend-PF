@@ -22,9 +22,6 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         unique: true,
         allowNull: false,
-        validate: {
-          isEmail: true,
-        },
       },
       premium: {
         type: DataTypes.BOOLEAN,
