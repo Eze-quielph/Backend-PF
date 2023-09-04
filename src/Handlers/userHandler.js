@@ -1,23 +1,14 @@
 const UserController = require("../Controllers/usersControllers");
 const userController = new UserController();
+const { User } = require("../db");
 
 const UploadFile = require("../Services/Upload");
 const uploadFIle = new UploadFile();
 
 const { client } = require("../Services/Redis/redis.config");
 
-const {
-  HTTP_STATUS_OK,
-  HTTP_STATUS_BAD_REQUEST,
-  HTTP_STATUS_INTERNAL_SERVER_ERROR,
-  HTTP_STATUS_FORBIDDEN,
-  HTTP_STATUS_NOT_FOUND,
-  HTTP_STATUS_UNAUTHORIZED,
-} = require("../Utils/statusCode");
-
 class UserHandler {
   constructor() {}
-
   async getUsers(req, res) {
     const page = parseInt(req.query.page) || 1;
     const perPage = parseInt(req.query.perPage) || 5;
@@ -162,6 +153,7 @@ class UserHandler {
       res.status(400).json({ error: error.message });
     }
   }
+  
 }
 
 module.exports = UserHandler;
