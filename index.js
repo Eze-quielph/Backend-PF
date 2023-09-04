@@ -1,5 +1,4 @@
 const app = require("./src/app");
-const { sequelize } = require("./src/db");
 require("dotenv").config();
 
 const { client } = require("./src/Services/Redis/redis.config");

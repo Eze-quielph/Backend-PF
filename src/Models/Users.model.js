@@ -31,22 +31,6 @@ module.exports = (sequelize) => {
         type: DataTypes.TEXT,
       },
     },
-    {
-      freezeTableName: true,
-      paranoid: true,
-      indexes: [
-        {
-          unique: true,
-          fields: ["id"],
-        },
-        {
-          unique: true,
-          fields: ["email"],
-        },
-        {
-          fields: ["username"],
-        },
-      ],
-    }
+    { timestamps: false, freezeTableName: true }
   );
 };
