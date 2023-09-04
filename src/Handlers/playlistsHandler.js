@@ -2,6 +2,8 @@ const PlaylistsController = require("../Controllers/playlistsController");
 
 const playlistsController = new PlaylistsController();
 
+const { client } = require("../Services/Redis/redis.config");
+
 class PlaylistsHandler {
   constructor() {}
 
@@ -9,8 +11,16 @@ class PlaylistsHandler {
     const page = parseInt(req.query.page) || 1;
     const perPage = parseInt(req.query.perPage) || 5;
     try {
-      const allPlaylists = await playlistsController.getPlaylists(page, perPage);
-      //if (!allPlaylists.length) throw new Error("Playlists aren't available");
+      let result;
+      await client.get("playlists", (err, reply) => {
+        if (reply) {
+          result = JSON.parse(reply);
+        }
+        console.log(err);
+      });
+
+      result = await playlistsController.getPlaylists(page, perPage);
+      await client.setEx("playlists", 15000, JSON.stringify(result));
       res.status(200).json(allPlaylists);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -20,8 +30,16 @@ class PlaylistsHandler {
   getPlaylistById = async (req, res) => {
     const { id } = req.params;
     try {
-      const playlist = await playlistsController.getPlaylistById(id);
-      if (!playlist) throw new Error("Playlist unavailable");
+      let result;
+      await client.get(`${id}`, (err, reply) => {
+        if (reply) {
+          result = JSON.parse(reply);
+        }
+        console.log(err);
+      });
+      result = await playlistsController.getPlaylistById(id);
+      if (!result) throw new Error("Playlist unavailable");
+      await client.setEx(`${id}`, 15000, JSON.stringify(result));
       res.status(200).json(playlist);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -33,9 +51,17 @@ class PlaylistsHandler {
     const page = parseInt(req.query.page) || 1;
     const perPage = parseInt(req.query.perPage) || 5;
     try {
+      let result;
+      await client.get(`${name}`, (err, reply) => {
+        if (reply) {
+          result = JSON.parse(reply);
+        }
+        console.log(err);
+      });
       if (!name) throw new Error("Name not entered");
-      const searchByName = await playlistsController.getPlaylistByName(name, page, perPage);
+      result = await playlistsController.getPlaylistByName(name, page, perPage);
       if (!searchByName.length) throw new Error("Playlist not found");
+      await client.setEx(`${name}`, 15000, JSON.stringify(result));
       res.status(200).json(searchByName);
     } catch (error) {
       res.status(400).json({ error: error.message });

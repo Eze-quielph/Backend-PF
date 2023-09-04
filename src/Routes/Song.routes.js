@@ -20,6 +20,7 @@ songRouter.get('/name', validateInputMiddleware, songsHandler.getByName) // GET 
 songRouter.get('/:id', validateIdMiddleware, songsHandler.getById) //GET by Id
 songRouter.put('/:id', upload.single('file'), validatePutMiddleware, songsHandler.updateSong) // name | description | genre | artist | image
 songRouter.post('/post',  upload.fields([{ name: 'image', maxCount: 1 }, { name: 'sound', maxCount: 1 }]), validatePostMiddlewae, songsHandler.postSound) // name | description | genre | artist | image | sound
-songRouter.put('/delete/:id', validateIdMiddleware, songsHandler.disableSong)
+songRouter.delete('/delete/:id', validateIdMiddleware, songsHandler.deleteSong)
+songRouter.get('/restore/:id', validateIdMiddleware, songsHandler.restoreSong)
 
 module.exports = songRouter 
