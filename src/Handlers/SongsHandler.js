@@ -137,7 +137,8 @@ class SongsHandler {
 
   postSound = async (req, res) => {
     const { name, description, artist, genre } = req.body;
-
+    console.log(req.body);
+    console.log(req.files)
     try {
       const uploadedImage = await uploadFIle.uploadImage(
         req.files.image[0].path
