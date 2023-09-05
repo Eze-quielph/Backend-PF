@@ -48,4 +48,3 @@ module.exports = (sequelize) => {
       ], }
   );
 };
->>>>>>>>> Temporary merge branch 2
