@@ -31,8 +31,7 @@ module.exports = (sequelize) => {
         type: DataTypes.TEXT,
       },
     },
-    {
-      freezeTableName: true,
+    { freezeTableName: true,
       paranoid: true,
       indexes: [
         {
@@ -46,7 +45,6 @@ module.exports = (sequelize) => {
         {
           fields: ["username"],
         },
-      ],
-    }
+      ], }
   );
 };
