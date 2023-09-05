@@ -9,7 +9,10 @@ const { client } = require("../Services/Redis/redis.config");
 const {
   HTTP_STATUS_OK,
   HTTP_STATUS_BAD_REQUEST,
-  HTTP_STATUS_INTERNAL_SERVER_ERROR
+  HTTP_STATUS_INTERNAL_SERVER_ERROR,
+  /* HTTP_STATUS_FORBIDDEN,
+  HTTP_STATUS_NOT_FOUND,
+  HTTP_STATUS_UNAUTHORIZED, */
 } = require("../Utils/statusCode");
 
 class UserHandler {
