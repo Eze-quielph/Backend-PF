@@ -2,15 +2,14 @@ const jwt = require("jsonwebtoken");
 const { LoginController } = require("../Controllers/index.controllers");
 
 const loginController = new LoginController();
-const HTTP_STATUS_UNAUTHORIZED = 401;
-const HTTP_STATUS_INTERNAL_SERVER_ERROR = 500;
+const {HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK, HTTP_STATUS_INTERNAL_SERVER_ERROR} = require('../Utils/statusCode')
 
 class LoginHandler {
   constructor() {}
 
   postLogin = async (req, res) => {
-    const { email, password, thirdPartyLogin } = req.query;
-    console.log(req.query);
+    const { email, password, thirdPartyLogin } = req.body;
+
     try {
       const result = await loginController.loginPost(
         email,
@@ -19,23 +18,17 @@ class LoginHandler {
       );
 
       if (result.error) {
-        return res
-          .status(HTTP_STATUS_UNAUTHORIZED)
-          .json({ message: result.error });
+        return res.status(HTTP_STATUS_BAD_REQUEST).json({ message: result.error });
       }
 
       const token = jwt.sign({ user: result }, process.env.JWT_SECRET, {
         expiresIn: "24h",
       });
 
-      res.json({ token });
+      res.status(HTTP_STATUS_OK).json({ token });
     } catch (error) {
-      console.error(error); 
-      res
-        .status(HTTP_STATUS_INTERNAL_SERVER_ERROR)
-        .json({ error: error.message || "Error interno del servidor" });
+      res.status(HTTP_STATUS_INTERNAL_SERVER_ERROR).json({ error: "Error interno del servidor" });
     }
   };
 }
-
 module.exports = LoginHandler;

@@ -4,6 +4,11 @@ const playlistsController = new PlaylistsController();
 
 const { client } = require("../Services/Redis/redis.config");
 
+const {
+  HTTP_STATUS_OK,
+  HTTP_STATUS_BAD_REQUEST,
+} = require("../Utils/statusCode");
+
 class PlaylistsHandler {
   constructor() {}
 
@@ -15,15 +20,16 @@ class PlaylistsHandler {
       await client.get("playlists", (err, reply) => {
         if (reply) {
           result = JSON.parse(reply);
+          res.status(HTTP_STATUS_OK).json(result);
         }
         console.log(err);
       });
 
       result = await playlistsController.getPlaylists(page, perPage);
       await client.setEx("playlists", 15000, JSON.stringify(result));
-      res.status(200).json(allPlaylists);
+      res.status(HTTP_STATUS_OK).json(result);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
 
@@ -34,15 +40,16 @@ class PlaylistsHandler {
       await client.get(`${id}`, (err, reply) => {
         if (reply) {
           result = JSON.parse(reply);
+          res.status(HTTP_STATUS_OK).json(result);
         }
         console.log(err);
       });
       result = await playlistsController.getPlaylistById(id);
       if (!result) throw new Error("Playlist unavailable");
       await client.setEx(`${id}`, 15000, JSON.stringify(result));
-      res.status(200).json(playlist);
+      res.status(HTTP_STATUS_OK).json(result);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
 
@@ -55,16 +62,17 @@ class PlaylistsHandler {
       await client.get(`${name}`, (err, reply) => {
         if (reply) {
           result = JSON.parse(reply);
+          res.status(HTTP_STATUS_OK).json(result);
         }
         console.log(err);
       });
       if (!name) throw new Error("Name not entered");
       result = await playlistsController.getPlaylistByName(name, page, perPage);
-      if (!searchByName.length) throw new Error("Playlist not found");
+      if (!result.length) throw new Error("Playlist not found");
       await client.setEx(`${name}`, 15000, JSON.stringify(result));
-      res.status(200).json(searchByName);
+      res.status(HTTP_STATUS_OK).json(result);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
 
@@ -76,9 +84,9 @@ class PlaylistsHandler {
         description
       );
       if (!newPlaylist) throw new Error("Playlist couldn't be created");
-      res.status(201).json(newPlaylist);
+      res.status(HTTP_STATUS_OK).json(newPlaylist);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
 
@@ -92,9 +100,9 @@ class PlaylistsHandler {
         id
       );
       if (!editedPlaylist) throw new Error("Playlist couldn't be modified");
-      res.status(200).json(editedPlaylist);
+      res.status(HTTP_STATUS_OK).json(editedPlaylist);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
 
@@ -103,9 +111,9 @@ class PlaylistsHandler {
     try {
       const deletedPlaylist = await playlistsController.deletePlaylist(id);
       if (!deletedPlaylist) throw new Error("Playlist couldn't be deleted");
-      res.status(201).json(deletedPlaylist);
+      res.status(HTTP_STATUS_OK).json(deletedPlaylist);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
 }
