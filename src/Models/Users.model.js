@@ -31,6 +31,21 @@ module.exports = (sequelize) => {
         type: DataTypes.TEXT,
       },
     },
-    { timestamps: false, freezeTableName: true }
+    { freezeTableName: true,
+      paranoid: true,
+      indexes: [
+        {
+          unique: true,
+          fields: ["id"],
+        },
+        {
+          unique: true,
+          fields: ["email"],
+        },
+        {
+          fields: ["username"],
+        },
+      ], }
   );
 };
+>>>>>>>>> Temporary merge branch 2
