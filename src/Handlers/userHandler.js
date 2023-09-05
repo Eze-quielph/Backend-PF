@@ -1,14 +1,20 @@
 const UserController = require("../Controllers/usersControllers");
 const userController = new UserController();
-const { User } = require("../db");
 
 const UploadFile = require("../Services/Upload");
 const uploadFIle = new UploadFile();
 
 const { client } = require("../Services/Redis/redis.config");
 
+const {
+  HTTP_STATUS_OK,
+  HTTP_STATUS_BAD_REQUEST,
+  HTTP_STATUS_INTERNAL_SERVER_ERROR
+} = require("../Utils/statusCode");
+
 class UserHandler {
   constructor() {}
+
   async getUsers(req, res) {
     const page = parseInt(req.query.page) || 1;
     const perPage = parseInt(req.query.perPage) || 5;
@@ -17,7 +23,7 @@ class UserHandler {
       await client.get("users", (err, reply) => {
         if (reply) {
           result = JSON.parse(reply);
-          res.status(200).json({ result: result });
+          res.status(HTTP_STATUS_OK).json({ result: result });
         }
         console.log(err);
       });
@@ -25,9 +31,9 @@ class UserHandler {
       if (!result) throw new Error("No se encontro los datos");
 
       await client.setEx("users", 15000, JSON.stringify(result));
-      res.status(200).json({ result: result });
+      res.status(HTTP_STATUS_OK).json({ result: result });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   }
 
@@ -40,16 +46,16 @@ class UserHandler {
       await client.get(`${username}`, (err, reply) => {
         if (reply) {
           result = JSON.parse(reply);
-          res.status(200).json({ result: result });
+          res.status(HTTP_STATUS_OK).json({ result: result });
         }
         console.log(err);
       });
       result = await userController.getUserByName(username, page, perPage);
       if (!result) throw new Error("No se encontro los datos");
       await client.setEx(`${username}`, 15000, JSON.stringify(result));
-      res.status(200).json({ result: result });
+      res.status(HTTP_STATUS_OK).json({ result: result });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   }
 
@@ -60,16 +66,16 @@ class UserHandler {
       await client.get(`${id}`, (err, reply) => {
         if (reply) {
           result = JSON.parse(reply);
-          res.status(200).json({ result: result });
+          res.status(HTTP_STATUS_OK).json({ result: result });
         }
         console.log(err);
       });
       result = await userController.getUserById(id);
       if (!result) throw new Error("no existe user con id");
       await client.setEx(`${id}`, 15000, JSON.stringify(result));
-      res.status(200).json({ result: result });
+      res.status(HTTP_STATUS_OK).json({ result: result });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
 
@@ -96,10 +102,10 @@ class UserHandler {
       );
 
       if (newUser.existing == true)
-        res.status(500).json({ error: newUser.message });
-      else res.status(200).json({ data: newUser });
+        res.status(HTTP_STATUS_INTERNAL_SERVER_ERROR).json({ error: newUser.message });
+      else res.status(HTTP_STATUS_OK).json({ data: newUser });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(HTTP_STATUS_INTERNAL_SERVER_ERROR).json({ error: error.message });
     }
   };
 
@@ -125,10 +131,10 @@ class UserHandler {
         password,
         newImage
       );
-      res.status(200).json({ result: result });
+      res.status(HTTP_STATUS_OK).json({ result: result });
     } catch (error) {
       return res
-        .status(400)
+        .status(HTTP_STATUS_BAD_REQUEST)
         .json({ error: "No se recibieron parametros necesarios" });
     }
   };
@@ -138,9 +144,9 @@ class UserHandler {
 
     try {
       const deteData = await userController.deleteUser(id);
-      res.status(200).json({ deteData: deteData });
+      res.status(HTTP_STATUS_OK).json({ deteData: deteData });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
 
@@ -148,12 +154,11 @@ class UserHandler {
     const { id } = req.params;
     try {
       const result = await userController.restoreUsers(id);
-      res.status(200).json({ result: result });
+      res.status(HTTP_STATUS_OK).json({ result: result });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   }
-  
 }
 
 module.exports = UserHandler;

@@ -4,6 +4,11 @@ const UploadFile = require("../Services/Upload");
 const songController = new SongsControllers();
 const uploadFIle = new UploadFile();
 
+const {
+  HTTP_STATUS_OK,
+  HTTP_STATUS_BAD_REQUEST
+} = require("../Utils/statusCode");
+
 const { client } = require("../Services/Redis/redis.config");
 
 class SongsHandler {
@@ -20,7 +25,7 @@ class SongsHandler {
       await client.get("songs", (err, reply) => {
         if (reply) {
           result = JSON.parse(reply);
-          res.status(200).json({ result: result });
+          res.status(HTTP_STATUS_OK).json({ result: result });
         }
         console.log(err);
       });
@@ -36,9 +41,9 @@ class SongsHandler {
       }
 
       await client.setEx("songs", 15000, JSON.stringify(result));
-      res.status(200).json({ result: result });
+      res.status(HTTP_STATUS_OK).json({ result: result });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
 
@@ -53,7 +58,7 @@ class SongsHandler {
       await client.get(`${name}`, (err, reply) => {
         if (reply) {
           result = JSON.parse(reply);
-          res.status(200).json({ result });
+          res.status(HTTP_STATUS_OK).json({ result });
         }
         console.log(err);
       });
@@ -71,9 +76,9 @@ class SongsHandler {
 
       await client.setEx(`${name}`, 15000, JSON.stringify(result));
 
-      res.status(200).json({ result });
+      res.status(HTTP_STATUS_OK).json({ result });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
 
@@ -86,7 +91,7 @@ class SongsHandler {
       await client.get(`${id}`, (err, reply) => {
         if (reply) {
           result = JSON.parse(reply);
-          res.status(200).json({ result: result });
+          res.status(HTTP_STATUS_OK).json({ result: result });
         }
         console.log(err);
       });
@@ -94,9 +99,9 @@ class SongsHandler {
       result = await songController.getById(id);
 
       await client.setEx(`${id}`, 15000, JSON.stringify(result));
-      res.status(200).json({ result: result });
+      res.status(HTTP_STATUS_OK).json({ result: result });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
 
@@ -129,9 +134,9 @@ class SongsHandler {
         genre,
         newImage
       );
-      res.status(200).json({ result: result });
+      res.status(HTTP_STATUS_OK).json({ result: result });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
 
@@ -158,9 +163,9 @@ class SongsHandler {
         song
       );
 
-      res.status(200).json({ result: result });
+      res.status(HTTP_STATUS_OK).json({ result: result });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
 
@@ -169,9 +174,9 @@ class SongsHandler {
 
     try {
       const result = await songController.deleteSong(id);
-      res.status(200).json({ result });
+      res.status(HTTP_STATUS_OK).json({ result });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   }
 
@@ -180,9 +185,9 @@ class SongsHandler {
 
     try {
       const result = await songController.restoreSong(id);
-      res.status(200).json({ result });
+      res.status(HTTP_STATUS_OK).json({ result });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
 }
