@@ -1,7 +1,7 @@
 const { sequelize } = require("../db");
 const { User } = sequelize.models;
 const { Op } = require("sequelize");
-
+const { bcrypt } = require("bcrypt");
 class UserController {
   constructor() {}
 
@@ -45,6 +45,7 @@ class UserController {
   }
 
   async postUser(username, email, password, image) {
+    const hashedContraseña = await bcrypt.hash(password, 8);
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return {
@@ -56,7 +57,7 @@ class UserController {
     const newUser = await User.create({
       username,
       email,
-      password,
+      password: hashedContraseña,
       image,
     });
 
@@ -73,22 +74,22 @@ class UserController {
     return { message: "Usuario eliminado correctamente" };
   }
 
-  async restoreUsers (id){
+  async restoreUsers(id) {
     try {
-      const user = await User.findByPk(id, {paranoid:false})
-      if(!user){
-        return { message: 'no existe un usuario con ese ID'}
+      const user = await User.findByPk(id, { paranoid: false });
+      if (!user) {
+        return { message: "no existe un usuario con ese ID" };
       }
       await user.restore();
       return {
         result: true,
-        message:"Usuario restaurado correctamente"
-      }
+        message: "Usuario restaurado correctamente",
+      };
     } catch (error) {
-      return{
+      return {
         result: false,
-        error: error.message
-      }
+        error: error.message,
+      };
     }
   }
 }

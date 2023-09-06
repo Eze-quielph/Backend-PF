@@ -2,7 +2,11 @@ const jwt = require("jsonwebtoken");
 const { LoginController } = require("../Controllers/index.controllers");
 
 const loginController = new LoginController();
-const {HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK, HTTP_STATUS_INTERNAL_SERVER_ERROR} = require('../Utils/statusCode')
+const {
+  HTTP_STATUS_BAD_REQUEST,
+  HTTP_STATUS_OK,
+  HTTP_STATUS_INTERNAL_SERVER_ERROR,
+} = require("../Utils/statusCode");
 
 class LoginHandler {
   constructor() {}
@@ -18,7 +22,9 @@ class LoginHandler {
       );
 
       if (result.error) {
-        return res.status(HTTP_STATUS_BAD_REQUEST).json({ message: result.error });
+        return res
+          .status(HTTP_STATUS_BAD_REQUEST)
+          .json({ message: result.error });
       }
 
       const token = jwt.sign({ user: result }, process.env.JWT_SECRET, {
@@ -27,7 +33,9 @@ class LoginHandler {
 
       res.status(HTTP_STATUS_OK).json({ token });
     } catch (error) {
-      res.status(HTTP_STATUS_INTERNAL_SERVER_ERROR).json({ error: "Error interno del servidor" });
+      res
+        .status(HTTP_STATUS_INTERNAL_SERVER_ERROR)
+        .json({ error: "Error interno del servidor" });
     }
   };
 }

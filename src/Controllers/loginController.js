@@ -1,4 +1,5 @@
 const { User } = require("../db");
+const bcrypt = require("bcrypt");
 
 class LoginController {
   constructor() {}
@@ -25,14 +26,23 @@ class LoginController {
             error: "Usuario no encontrado",
           };
         }
+        const userPassword = user.password;
 
-        if (user.password !== password) {
-          return {
-            error: "Contraseña incorrecta",
-          };
-        }
+        // if (user.password !== password) {
+        //   return {
+        //     error: "Contraseña incorrecta",
+        //   };
+        // }
 
-        return user;
+        await bcrypt.compare(userPassword, password).then((result) => {
+          if (result) {
+            return user;
+          } else {
+            return {
+              error: "Parámetros no coinciden ",
+            };
+          }
+        });
       }
     } catch (err) {
       return {
