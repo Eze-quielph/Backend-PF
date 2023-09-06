@@ -105,10 +105,14 @@ class UserHandler {
       );
 
       if (newUser.existing == true)
-        res.status(HTTP_STATUS_INTERNAL_SERVER_ERROR).json({ error: newUser.message });
+        res
+          .status(HTTP_STATUS_INTERNAL_SERVER_ERROR)
+          .json({ error: newUser.message });
       else res.status(HTTP_STATUS_OK).json({ data: newUser });
     } catch (error) {
-      res.status(HTTP_STATUS_INTERNAL_SERVER_ERROR).json({ error: error.message });
+      res
+        .status(HTTP_STATUS_INTERNAL_SERVER_ERROR)
+        .json({ error: error.message });
     }
   };
 
