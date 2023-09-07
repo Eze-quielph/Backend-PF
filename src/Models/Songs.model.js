@@ -1,5 +1,5 @@
 const { DataTypes, Model } = require("sequelize");
-const {sequelize }= require('../../index'); // Asegúrate de que la ruta sea correcta
+const {sequelize }= require('../../index'); 
 
 class Song extends Model {
   static initModel(sequelize) {
@@ -39,6 +39,10 @@ class Song extends Model {
           type: DataTypes.BOOLEAN,
           defaultValue: true,
         },
+        Points: {
+          type: DataTypes.INTEGER,
+          DefaultValue: 0,
+        }
       },
       {
         sequelize,

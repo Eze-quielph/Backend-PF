@@ -213,5 +213,21 @@ class SongsHandler {
       res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
+
+  async pointSong(req, res) {
+    const { id } = req.params;
+    const { points } = req.query;
+    
+    try {
+      const result = await songController.pointSong(id, points);
+      if (result.message) {
+        res.status(HTTP_STATUS_BAD_REQUEST).json({ error: result.error });
+      } else {
+        res.status(HTTP_STATUS_OK).json({ result: result });
+      }
+    } catch (error) {
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
+    }
+  }
 }
 module.exports = SongsHandler;
