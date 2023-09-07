@@ -6,7 +6,7 @@ const uploadFIle = new UploadFile();
 
 const {
   HTTP_STATUS_OK,
-  HTTP_STATUS_BAD_REQUEST
+  HTTP_STATUS_BAD_REQUEST,
 } = require("../Utils/statusCode");
 
 const { client } = require("../Services/Redis/redis.config");
@@ -108,17 +108,16 @@ class SongsHandler {
   updateSong = async (req, res) => {
     const { name, description, artist, genre } = req.body;
     const { id } = req.params;
-   
+
     const file = req.file;
     let newImage;
 
-   
     try {
       if (file) {
         const imagePath = file.path;
-     
+
         const data = await uploadFIle.uploadImage(imagePath);
-  
+
         if (data.length < 15) {
           newImage = imagePath;
         } else {
@@ -153,7 +152,7 @@ class SongsHandler {
 
       const image = uploadedImage;
       const song = uploadedSound;
-     
+
       const result = await songController.postSong(
         name,
         description,
@@ -169,7 +168,7 @@ class SongsHandler {
     }
   };
 
-  async deleteSong (req,res){
+  async deleteSong(req, res) {
     const { id } = req.params;
 
     try {
@@ -186,6 +185,26 @@ class SongsHandler {
     try {
       const result = await songController.restoreSong(id);
       res.status(HTTP_STATUS_OK).json({ result });
+    } catch (error) {
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
+    }
+  };
+
+  sortByName = async (req, res) => {
+    // res.send("estas en el orderByName");
+    try {
+      const byName = await songController.oderByName();
+      res.status(HTTP_STATUS_OK).json({ result: byName });
+    } catch (error) {
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
+    }
+  };
+
+  sortByDate = async (req, res) => {
+    // res.send("estas en el orderByData");
+    try {
+      const byDate = await songController.oderByDate();
+      res.status(HTTP_STATUS_OK).json({ result: byDate });
     } catch (error) {
       res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }

@@ -24,8 +24,9 @@ class SongsControllers {
           where: {
             genre: { [Op.iLike]: `%${genre}%` },
             artist: { [Op.iLike]: `%${artist}%` },
-          }, offset: (page - 1) * perPage, limit:perPage
-
+          },
+          offset: (page - 1) * perPage,
+          limit: perPage,
         });
         return data;
       } else if (genre && !artist) {
@@ -114,7 +115,7 @@ class SongsControllers {
     }
   };
 
-  async deleteSong (id){
+  async deleteSong(id) {
     const song = await song.findByPk(id);
     if (!song) {
       return { message: `No existe un usuario con ese ID` };
@@ -126,19 +127,19 @@ class SongsControllers {
 
   restoreSong = async (id) => {
     try {
-      const song = await Song.findByPk(id, {paranoid: false});
-      if (!song)  return { message: 'no existe una cancion con ese ID'}
+      const song = await Song.findByPk(id, { paranoid: false });
+      if (!song) return { message: "no existe una cancion con ese ID" };
 
       await song.restore();
-       return {
+      return {
         result: true,
-        message:"Cancion restaurada correctamente"
-      }
+        message: "Cancion restaurada correctamente",
+      };
     } catch (error) {
-      return{
+      return {
         result: false,
-        error: error.message
-      }
+        error: error.message,
+      };
     }
   };
 
@@ -159,6 +160,25 @@ class SongsControllers {
       });
 
       return data;
+    } catch (error) {
+      return error;
+    }
+  };
+
+  oderByName = async () => {
+    // console.log("by name");
+    try {
+      const byName = await Song.findAll({ order: [["name", "ASC"]] });
+      return byName;
+    } catch (error) {
+      return error;
+    }
+  };
+  oderByDate = async () => {
+    // console.log("by date");
+    try {
+      const byDate = await Song.findAll({ order: [["createdAt", "ASC"]] });
+      return byDate;
     } catch (error) {
       return error;
     }
