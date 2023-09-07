@@ -162,7 +162,11 @@ class SongsHandler {
         song
       );
 
-      res.status(HTTP_STATUS_OK).json({ result: result });
+      if (result.error) {
+        res.status(HTTP_STATUS_BAD_REQUEST).json({ error: result.error });
+      } else {
+        res.status(HTTP_STATUS_OK).json({ result: result });
+      }
     } catch (error) {
       res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
