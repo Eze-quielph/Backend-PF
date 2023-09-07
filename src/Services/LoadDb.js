@@ -1,5 +1,5 @@
-const { sequelize } = require("../db");
-const { User, Song } = sequelize.models;
+const User= require('../Models/Users.model')
+const Song = require('../Models/Songs.model')
 
 class DataService {
   constructor(songs, users) {
