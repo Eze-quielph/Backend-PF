@@ -12,14 +12,10 @@ class LoginHandler {
   constructor() {}
 
   postLogin = async (req, res) => {
-    const { email, password, thirdPartyLogin } = req.body;
+    const { email, password } = req.body;
 
     try {
-      const result = await loginController.loginPost(
-        email,
-        password,
-        thirdPartyLogin
-      );
+      const result = await loginController.loginPost(email, password);
 
       if (result.error) {
         return res
@@ -31,7 +27,9 @@ class LoginHandler {
         expiresIn: "24h",
       });
 
-      res.status(HTTP_STATUS_OK).json({ token });
+      res
+        .status(HTTP_STATUS_OK)
+        .json({ message: "Usuario autenticado exitosamente.", token });
     } catch (error) {
       res
         .status(HTTP_STATUS_INTERNAL_SERVER_ERROR)
