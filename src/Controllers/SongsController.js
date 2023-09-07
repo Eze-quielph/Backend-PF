@@ -167,6 +167,24 @@ class SongsControllers {
       };
     }
   };
+  oderByName = async () => {
+    // console.log("by name");
+    try {
+      const byName = await Song.findAll({ order: [["name", "ASC"]] });
+      return byName;
+    } catch (error) {
+      return error;
+    }
+  };
+  oderByDate = async () => {
+    // console.log("by date");
+    try {
+      const byDate = await Song.findAll({ order: [["createdAt", "ASC"]] });
+      return byDate;
+    } catch (error) {
+      return error;
+    }
+  };
 }
 
 module.exports = SongsControllers;
