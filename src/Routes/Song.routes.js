@@ -18,6 +18,7 @@ const upload = multer({ dest: "uploads/" });
 songRouter.get("/", songsHandler.getSong); //GET All
 songRouter.get("/name", validateInputMiddleware, songsHandler.getByName); // GET by Name
 songRouter.get("/:id", validateIdMiddleware, songsHandler.getById); //GET by Id
+songRouter.put('/point/:id', validateIdMiddleware, songsHandler.pointSong)
 songRouter.put(
   "/:id",
   upload.single("file"),

@@ -185,6 +185,26 @@ class SongsControllers {
       return error;
     }
   };
+
+  async pointSong (id, point){
+   try {
+    console.log(point);
+    const existing = await Song.findByPk(id)
+    if(point > 5) return{
+      message: "Point no puede ser mayor a 5"
+    }
+    if(!existing) return{
+      message: "No existe cancion con ese id" 
+    }
+    console.log(existing.dataValues);
+    if(point) existing.dataValues.Points = point
+
+    const data = await existing.save()
+    return data
+   } catch (error) {
+    return error
+   }
+  }
 }
 
 module.exports = SongsControllers;
