@@ -24,11 +24,10 @@ usersRouter.get("/:id",validateTokenMiddleware, validateIdMiddleware, userHandle
 usersRouter.delete("/:id", validateTokenMiddleware,validateIdMiddleware, userHandler.deleteUser);
 usersRouter.post("/login", loginHandler.postLogin)
 usersRouter.post(
-  "/",
-  validateTokenMiddleware,
+  "/register",
   upload.single("file"),
   validatePostMiddleware,
-  userHandler.postUser
+  userHandler.registertUser
 );
 usersRouter.put(
   "/:id",

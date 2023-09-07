@@ -1,7 +1,8 @@
 const { sequelize } = require("../db");
 const { User } = sequelize.models;
 const { Op } = require("sequelize");
-const { bcrypt } = require("bcrypt");
+const bcrypt = require("bcrypt");
+
 class UserController {
   constructor() {}
 
@@ -45,7 +46,6 @@ class UserController {
   }
 
   async postUser(username, email, password, image) {
-    const hashedContraseña = await bcrypt.hash(password, 8);
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return {
@@ -53,6 +53,8 @@ class UserController {
         message: "Ya existe un usuario con ese email",
       };
     }
+
+    const hashedContraseña = await bcrypt.hash(password, 8);
 
     const newUser = await User.create({
       username,
