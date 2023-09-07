@@ -4,6 +4,8 @@ const userController = new UserController();
 const UploadFile = require("../Services/Upload");
 const uploadFIle = new UploadFile();
 
+const mailer = require("../Services/nodemailer/Mailer");
+
 const { client } = require("../Services/Redis/redis.config");
 
 const {
@@ -82,21 +84,26 @@ class UserHandler {
     }
   };
 
-  postUser = async (req, res) => {
+  registertUser = async (req, res) => {
     const { username, email, password } = req.body;
 
     const file = req.file;
     let newImage;
+
     try {
+
       if (file) {
+
         const imagePath = file.path;
         const data = await uploadFIle.uploadImage(imagePath);
+
         if (data.length < 15) {
           newImage = imagePath;
         } else {
           newImage = data;
         }
       }
+
       const newUser = await userController.postUser(
         username,
         email,
@@ -108,7 +115,10 @@ class UserHandler {
         res
           .status(HTTP_STATUS_INTERNAL_SERVER_ERROR)
           .json({ error: newUser.message });
-      else res.status(HTTP_STATUS_OK).json({ data: newUser });
+      else {
+        await mailer.sendNewUser(email)
+        res.status(HTTP_STATUS_OK).json({ data: newUser });
+      }
     } catch (error) {
       res
         .status(HTTP_STATUS_INTERNAL_SERVER_ERROR)

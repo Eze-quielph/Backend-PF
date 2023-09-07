@@ -1,5 +1,4 @@
-const { sequelize } = require("../db");
-const { Song } = sequelize.models;
+const  Song  = require("../Models/Songs.model");
 const { Op } = require("sequelize");
 
 class SongsControllers {
@@ -145,10 +144,12 @@ class SongsControllers {
   postSong = async (name, description, artist, genre, image, song) => {
     try {
       const existingSongName = await Song.findOne({ where: { name } });
-      if (existingSongName)
-        throw new Error("Ya existe una canción con ese nombre");
-
-      //console.log(image, song);
+      if (existingSongName) {
+        return {
+          error: "Ya existe una canción con ese nombre",
+        };
+      }
+  
       const data = await Song.create({
         name: name,
         description: description,
@@ -157,12 +158,15 @@ class SongsControllers {
         song: song,
         image: image,
       });
-
+  
       return data;
     } catch (error) {
-      return error;
+      return {
+        error: error.message,
+      };
     }
   };
+  
 }
 
 module.exports = SongsControllers;
