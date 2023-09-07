@@ -142,7 +142,7 @@ class SongsHandler {
 
   postSound = async (req, res) => {
     const { name, description, artist, genre } = req.body;
-
+  
     try {
       const uploadedImage = await uploadFIle.uploadImage(
         req.files.image[0].path
@@ -150,10 +150,10 @@ class SongsHandler {
       const uploadedSound = await uploadFIle.uploadSound(
         req.files.sound[0].path
       );
-
+  
       const image = uploadedImage;
       const song = uploadedSound;
-     
+  
       const result = await songController.postSong(
         name,
         description,
@@ -162,12 +162,17 @@ class SongsHandler {
         image,
         song
       );
-
-      res.status(HTTP_STATUS_OK).json({ result: result });
+  
+      if (result.error) {
+        res.status(HTTP_STATUS_BAD_REQUEST).json({ error: result.error });
+      } else {
+        res.status(HTTP_STATUS_OK).json({ result: result });
+      }
     } catch (error) {
       res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
+  
 
   async deleteSong (req,res){
     const { id } = req.params;
