@@ -12,6 +12,7 @@ module.exports = { sequelize };
 const User = require("./src/Models/Users.model");
 const Song = require("./src/Models/Songs.model");
 const Playlist = require("./src/Models/Playlists.model");
+const Payment = require("./src/Models/Payment.model")
 
 User.belongsToMany(Song, { through: "user_song" });
 Song.belongsTo(User, { through: "user_song" });
@@ -19,6 +20,7 @@ User.belongsToMany(Playlist, { through: "playlist_user" });
 Playlist.belongsTo(User, { through: "playlist_user" });
 Song.belongsToMany(Playlist, { through: "song_playlist" });
 Playlist.belongsToMany(Song, { through: "song_playlist" });
+Payment.belongsToMany(User, { through: "Payment_User" })
 
 const app = require("./src/app");
 const { client } = require("./src/Services/Redis/redis.config");
