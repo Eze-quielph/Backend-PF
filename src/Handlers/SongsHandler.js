@@ -6,7 +6,7 @@ const uploadFIle = new UploadFile();
 
 const {
   HTTP_STATUS_OK,
-  HTTP_STATUS_BAD_REQUEST
+  HTTP_STATUS_BAD_REQUEST,
 } = require("../Utils/statusCode");
 
 const { client } = require("../Services/Redis/redis.config");
@@ -108,17 +108,16 @@ class SongsHandler {
   updateSong = async (req, res) => {
     const { name, description, artist, genre } = req.body;
     const { id } = req.params;
-   
+
     const file = req.file;
     let newImage;
 
-   
     try {
       if (file) {
         const imagePath = file.path;
-     
+
         const data = await uploadFIle.uploadImage(imagePath);
-  
+
         if (data.length < 15) {
           newImage = imagePath;
         } else {
@@ -142,7 +141,7 @@ class SongsHandler {
 
   postSound = async (req, res) => {
     const { name, description, artist, genre } = req.body;
-  
+
     try {
       const uploadedImage = await uploadFIle.uploadImage(
         req.files.image[0].path
@@ -150,10 +149,10 @@ class SongsHandler {
       const uploadedSound = await uploadFIle.uploadSound(
         req.files.sound[0].path
       );
-  
+
       const image = uploadedImage;
       const song = uploadedSound;
-  
+
       const result = await songController.postSong(
         name,
         description,
@@ -162,7 +161,7 @@ class SongsHandler {
         image,
         song
       );
-  
+
       if (result.error) {
         res.status(HTTP_STATUS_BAD_REQUEST).json({ error: result.error });
       } else {
@@ -172,9 +171,8 @@ class SongsHandler {
       res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
-  
 
-  async deleteSong (req,res){
+  async deleteSong(req, res) {
     const { id } = req.params;
 
     try {
@@ -195,5 +193,41 @@ class SongsHandler {
       res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   };
+
+  sortByName = async (req, res) => {
+    // res.send("estas en el orderByName");
+    try {
+      const byName = await songController.oderByName();
+      res.status(HTTP_STATUS_OK).json({ result: byName });
+    } catch (error) {
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
+    }
+  };
+
+  sortByDate = async (req, res) => {
+    // res.send("estas en el orderByData");
+    try {
+      const byDate = await songController.oderByDate();
+      res.status(HTTP_STATUS_OK).json({ result: byDate });
+    } catch (error) {
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
+    }
+  };
+
+  async pointSong(req, res) {
+    const { id } = req.params;
+    const { points } = req.query;
+    
+    try {
+      const result = await songController.pointSong(id, points);
+      if (result.message) {
+        res.status(HTTP_STATUS_BAD_REQUEST).json({ error: result.error });
+      } else {
+        res.status(HTTP_STATUS_OK).json({ result: result });
+      }
+    } catch (error) {
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
+    }
+  }
 }
 module.exports = SongsHandler;

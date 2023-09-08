@@ -1,6 +1,7 @@
 const  User  = require("../Models/Users.model");;
 const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
+const mailer = require('../Services/nodemailer/Mailer')
 
 class UserController {
   constructor() {}
@@ -92,6 +93,17 @@ class UserController {
         error: error.message,
       };
     }
+  }
+  
+  async userPremiun (userId, ){
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return { message: "no existe un usuario con ese ID" };
+    }
+    const premium = await user.update({premium: true});
+    
+    await mailer.sendPremiumUser(user.dataValues.email)
+    console.log(premium);
   }
 }
 

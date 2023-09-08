@@ -15,6 +15,7 @@ class Mailer {
   });
 
   msfSucceffull_new_user =  "Tu usuario fue creado correctamente"
+  msPremiun_succefull_user = "Se te activo el premiun"
 
   async initialMain() {
     this.transporter
@@ -45,7 +46,23 @@ class Mailer {
    }
   }
 
-  
+  async sendPremiumUser(email) {
+    try {
+     if(!email) throw new Error("se necesita el email")
+ 
+     const info = await this.transporter.sendMail({
+         from: `"Create new Users 👻" <${process.env.USERNODEMAILER}`,
+         to: email, 
+         subject: "SpootChat", 
+         text: this.msPremiun_succefull_user, 
+       });
+     
+     if(!info)throw new Error("Algo salio mal")
+     return info
+    } catch (error) {
+     console.error(error);
+    }
+   }
 }
 
 const mailer = new Mailer();
