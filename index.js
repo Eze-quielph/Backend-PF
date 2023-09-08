@@ -19,6 +19,7 @@ User.belongsToMany(Playlist, { through: "playlist_user" });
 Playlist.belongsTo(User, { through: "playlist_user" });
 Song.belongsToMany(Playlist, { through: "song_playlist" });
 Playlist.belongsToMany(Song, { through: "song_playlist" });
+User.hasMany(Song, { as: "user_song" });
 
 const app = require("./src/app");
 const { client } = require("./src/Services/Redis/redis.config");
