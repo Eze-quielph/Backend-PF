@@ -29,7 +29,7 @@ class LoginHandler {
 
       res
         .status(HTTP_STATUS_OK)
-        .json({ message: "Usuario autenticado exitosamente.", token });
+        .json({ message: "Usuario autenticado exitosamente.", token, user: result });
     } catch (error) {
       res
         .status(HTTP_STATUS_INTERNAL_SERVER_ERROR)
