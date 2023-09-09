@@ -12,14 +12,10 @@ class LoginHandler {
   constructor() {}
 
   postLogin = async (req, res) => {
-    const { email, password, thirdPartyLogin } = req.body;
+    const { email, password } = req.body;
 
     try {
-      const result = await loginController.loginPost(
-        email,
-        password,
-        thirdPartyLogin
-      );
+      const result = await loginController.loginPost(email, password);
 
       if (result.error) {
         return res
