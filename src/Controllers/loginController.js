@@ -21,10 +21,10 @@ class LoginController {
       }
 
       const userPassword = user.password;
-     // console.log(userPassword);
-      //const match = await bcrypt.compare(password, userPassword);
-     // console.log(match);
-      if (userPassword == password) {
+    
+      const match = await bcrypt.compare(password, userPassword);
+
+      if (match) {
         return user;
       } else {
         return {
