@@ -31,7 +31,9 @@ class LoginHandler {
         expiresIn: "24h",
       });
 
-      res.status(HTTP_STATUS_OK).json({ token });
+      res
+        .status(HTTP_STATUS_OK)
+        .json({ message: "Usuario autenticado exitosamente.", token, user: result });
     } catch (error) {
       res
         .status(HTTP_STATUS_INTERNAL_SERVER_ERROR)
