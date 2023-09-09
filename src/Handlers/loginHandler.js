@@ -13,7 +13,7 @@ class LoginHandler {
 
   postLogin = async (req, res) => {
     const { email, password } = req.body;
-
+    console.log(req.body);
     try {
       const result = await loginController.loginPost(email, password);
 
