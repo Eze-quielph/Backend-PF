@@ -12,7 +12,7 @@ class LoginHandler {
   constructor() {}
 
   postLogin = async (req, res) => {
-    const { email, password, thirdPartyLogin } = req.body;
+    const { email, password } = req.body;
 
     console.log(req.body);
     console.log(email, password, thirdPartyLogin);
