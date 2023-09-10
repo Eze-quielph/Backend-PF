@@ -1,4 +1,4 @@
-const  User  = require("../Models/Users.model");
+const User = require("../Models/Users.model");
 const bcrypt = require("bcrypt");
 
 class LoginController {
@@ -33,16 +33,14 @@ class LoginController {
         //     error: "Contraseña incorrecta",
         //   };
         // }
+        console.log(userPassword);
+        const compare = await bcrypt.compare(password, userPassword);
 
-        await bcrypt.compare(userPassword, password).then((result) => {
-          if (result) {
-            return user;
-          } else {
-            return {
-              error: "Parámetros no coinciden ",
-            };
-          }
-        });
+        if (compare) return user;
+        else
+          return {
+            error: "Contraseña incorrecta",
+          };
       }
     } catch (err) {
       return {

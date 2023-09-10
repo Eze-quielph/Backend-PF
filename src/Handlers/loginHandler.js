@@ -14,17 +14,19 @@ class LoginHandler {
   postLogin = async (req, res) => {
     const { email, password, thirdPartyLogin } = req.body;
 
+    console.log(req.body);
+    console.log(email, password, thirdPartyLogin);
     try {
       const result = await loginController.loginPost(
         email,
         password,
         thirdPartyLogin
       );
-
-      if (result.error) {
+        
+      if (!result) {
         return res
           .status(HTTP_STATUS_BAD_REQUEST)
-          .json({ message: result.error });
+          .json({ message: "result no existe" });
       }
 
       const token = jwt.sign({ user: result }, process.env.JWT_SECRET, {
@@ -35,6 +37,7 @@ class LoginHandler {
         .status(HTTP_STATUS_OK)
         .json({ message: "Usuario autenticado exitosamente.", token, user: result });
     } catch (error) {
+      console.log(error);
       res
         .status(HTTP_STATUS_INTERNAL_SERVER_ERROR)
         .json({ error: "Error interno del servidor" });
