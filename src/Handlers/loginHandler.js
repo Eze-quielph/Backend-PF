@@ -12,9 +12,10 @@ class LoginHandler {
   constructor() {}
 
   postLogin = async (req, res) => {
-    const { email, password, thitdPartyLogin } = req.body;
+    const { email, password, thirdPartyLogin } = req.body;
 
     try {
+      
       const result = await loginController.loginPost(
         email,
         password,
