@@ -10,6 +10,7 @@ const allowedOrigins = [
   "https://spoot-chat-client-iota.vercel.app",
   "http://localhost:4322",
   "https://spoot-front-andrewsando.vercel.app"
+]
 
 const corsOptions = {
   origin: allowedOrigins,
