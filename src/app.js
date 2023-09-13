@@ -7,16 +7,26 @@ const mainRouter = require("./Routes/index.routes");
 
 const app = express();
 const server = http.createServer(app)
-const io = new Server(server)
+const io = new Server(server, {
+  cors:{
+    origin:"http://localhost:5173"
+  },
+/*  cors:{
+    origin:"https://spoot-front-andrewsando.vercel.app"
+  }  */
+})
 
 io.on("connection", socket =>{
-  console.info(socket)
+  socket.on("NewMessage", data => {
+    console.info(data)
+    socket.broadcast.emit("message", data)
+  })
 })
 
 // Middlewares y Cors
 const allowedOrigins = [
   "https://spoot-chat-client-iota.vercel.app",
-  "http://localhost:4322",
+  "http://localhost:5173",
   "https://spoot-front-andrewsando.vercel.app"
 ]
 
