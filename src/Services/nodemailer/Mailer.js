@@ -16,6 +16,7 @@ class Mailer {
 
   msfSucceffull_new_user =  "Tu usuario fue creado correctamente, puedes acceder por este link: https://spoot-front-andrewsando.vercel.app/registration-success"
   msPremiun_succefull_user = "Se te activo el premiun, felicidades: https://spoot-front-andrewsando.vercel.app/premium-success"
+  msUpdate_password_user= "Se cambio exitosamente su password"
 
   async initialMain() {
     this.transporter
@@ -63,6 +64,24 @@ class Mailer {
      console.error(error);
     }
    }
+
+  async updatePassword(email){
+    try {
+      if(!email) throw new Error("se necesita el email")
+  
+      const info = await this.transporter.sendMail({
+          from: `"Update Password" <${process.env.USERNODEMAILER}`,
+          to: email, 
+          subject: "SpootChat", 
+          text: this.msUpdate_password_user, 
+        });
+      
+      if(!info)throw new Error("Algo salio mal")
+      return info
+     } catch (error) {
+      console.error(error);
+     }
+  }
 }
 
 const mailer = new Mailer();
