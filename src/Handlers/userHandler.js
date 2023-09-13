@@ -91,9 +91,7 @@ class UserHandler {
     let newImage;
 
     try {
-
       if (file) {
-
         const imagePath = file.path;
         const data = await uploadFIle.uploadImage(imagePath);
 
@@ -116,7 +114,7 @@ class UserHandler {
           .status(HTTP_STATUS_INTERNAL_SERVER_ERROR)
           .json({ error: newUser.message });
       else {
-        await mailer.sendNewUser(email)
+        await mailer.sendNewUser(email);
         res.status(HTTP_STATUS_OK).json({ data: newUser });
       }
     } catch (error) {
@@ -172,6 +170,28 @@ class UserHandler {
     try {
       const result = await userController.restoreUsers(id);
       res.status(HTTP_STATUS_OK).json({ result: result });
+    } catch (error) {
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
+    }
+  }
+  async returnPassword(req, res) {
+    const { id } = req.params;
+    const { password } = req.query;
+
+    try {
+      if (!password) {
+        return res
+          .status(HTTP_STATUS_BAD_REQUEST)
+          .json({ status: "false", message: "No enviaste el password" });
+      }
+      const result = await userController.returnPassword(id, password);
+      if (result.result == false && result.error)
+        res.status(HTTP_STATUS_BAD_REQUEST).json({ result: result });
+      else {
+        console.info(result);
+        await mailer.updatePassword(result.email);
+        res.status(HTTP_STATUS_OK).json({ result: result });
+      }
     } catch (error) {
       res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }

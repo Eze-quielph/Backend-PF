@@ -1,7 +1,7 @@
-const  User  = require("../Models/Users.model");;
+const User = require("../Models/Users.model");
 const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
-const mailer = require('../Services/nodemailer/Mailer')
+const mailer = require("../Services/nodemailer/Mailer");
 
 class UserController {
   constructor() {}
@@ -94,16 +94,40 @@ class UserController {
       };
     }
   }
-  
-  async userPremiun (userId, ){
+
+  async userPremiun(userId) {
     const user = await User.findByPk(userId);
     if (!user) {
       return { message: "no existe un usuario con ese ID" };
     }
-    const premium = await user.update({premium: true});
-    
-    await mailer.sendPremiumUser(user.dataValues.email)
+    const premium = await user.update({ premium: true });
+
+    await mailer.sendPremiumUser(user.dataValues.email);
     console.log(premium);
+  }
+
+  async returnPassword(userId, password) {
+    try {
+      const user = await User.findByPk(userId);
+      if (!user) {
+        return { message: "no existe un usuario con ese ID" };
+      }
+      
+      const hashPassword = await bcrypt.hash(password, 8);
+   
+      await user.update({ password: hashPassword });
+      console.info(user)
+      return {
+        result: true,
+        message: "Password actualizada correctamente",
+        email: user.dataValues.email
+      };
+    } catch (error) {
+      return {
+        result: false,
+        error: error.message,
+      };
+    }
   }
 }
 
