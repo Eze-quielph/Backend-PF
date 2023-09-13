@@ -22,7 +22,7 @@ Song.belongsToMany(Playlist, { through: "song_playlist" });
 Playlist.belongsToMany(Song, { through: "song_playlist" });
 Payment.belongsToMany(User, { through: "Payment_User" })
 
-const app = require("./src/app");
+const server = require("./src/app");
 const { client } = require("./src/Services/Redis/redis.config");
 
 const DataService = require("./src/Services/LoadDb");
@@ -42,7 +42,7 @@ sequelize
   .then(() => {
     console.log("Modelos sincronizados con la base de datos.");
 
-    app.listen(PORT, async () => {
+    server.listen(PORT, async () => {
       client.on("error", (err) => console.log("Redis Client Error", err));
 
       await client.connect();

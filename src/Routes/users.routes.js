@@ -38,6 +38,6 @@ usersRouter.put(
   userHandler.putUser
 );
 usersRouter.get('/restore/:id', validateIdMiddleware, userHandler.restoreUserById);
-
+usersRouter.put("/restorePassword/:id", validateIdMiddleware, userHandler.returnPassword)
 
 module.exports = usersRouter;
