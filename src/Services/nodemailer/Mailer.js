@@ -14,8 +14,8 @@ class Mailer {
     },
   });
 
-  msfSucceffull_new_user =  "Tu usuario fue creado correctamente"
-  msPremiun_succefull_user = "Se te activo el premiun"
+  msfSucceffull_new_user =  "Tu usuario fue creado correctamente, puedes acceder por este link: https://spoot-front-andrewsando.vercel.app/registration-success"
+  msPremiun_succefull_user = "Se te activo el premiun, felicidades: https://spoot-front-andrewsando.vercel.app/premium-success"
 
   async initialMain() {
     this.transporter

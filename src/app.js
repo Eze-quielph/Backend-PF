@@ -7,9 +7,10 @@ const app = express();
 
 // Middlewares y Cors
 const allowedOrigins = [
-  "https://spoot-chat-client-k9eo.vercel.app/",
-  "http://localhost:4322", // Agrega aquí la segunda ruta de origen
-];
+  "https://spoot-chat-client-iota.vercel.app",
+  "http://localhost:4322",
+  "https://spoot-front-andrewsando.vercel.app"
+]
 
 const corsOptions = {
   origin: allowedOrigins,
@@ -17,7 +18,7 @@ const corsOptions = {
   credentials: true,
 };
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.disable("x-powered-by");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
