@@ -1,4 +1,4 @@
-const User = require("../Models/Users.model");
+const Users = require("../Models/Users.model");
 const bcrypt = require("bcrypt");
 
 class LoginController {
@@ -7,12 +7,11 @@ class LoginController {
   loginPost = async (email, password) => {
     try {
       console.log(email, password);
-      const user = await User.findOne({
+      const user = await Users.findOne({
         where: {
           email: email,
         },
       });
-      console.log(user);
 
       if (!user) {
         return {
