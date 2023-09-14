@@ -1,4 +1,4 @@
-const User = require("../Models/Users.model");
+const {User} = require("../Models/Models");
 const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 const mailer = require("../Services/nodemailer/Mailer");
@@ -45,7 +45,7 @@ class UserController {
     return updatedUser;
   }
 
-  async postUser(username, email, password, image) {
+  async postUser(username, email, password, image, otpSecret) {
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return {
@@ -61,6 +61,7 @@ class UserController {
       email,
       password: hashedContraseña,
       image,
+      otpSecret: otpSecret
     });
 
     return newUser;

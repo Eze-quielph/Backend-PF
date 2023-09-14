@@ -1,5 +1,5 @@
 const { DataTypes, Model } = require("sequelize");
-const {sequelize} = require('../../index'); // Asegúrate de que la ruta sea correcta
+const sequelize = require('../sequelize');
 
 class User extends Model {
   static initModel(sequelize) {
@@ -30,10 +30,17 @@ class User extends Model {
         image: {
           type: DataTypes.TEXT,
         },
+        otpSecret: {
+          type: DataTypes.STRING,
+        },
+        otpCounter: {
+          type: DataTypes.INTEGER,
+          defaultValue: 0,
+        },
       },
       {
         sequelize,
-        modelName: "User",
+        modelName: "Users",
         freezeTableName: true,
         paranoid: true,
         indexes: [

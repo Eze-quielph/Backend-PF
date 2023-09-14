@@ -1,4 +1,4 @@
-const Payment = require('../Models/Payment.model')
+const {Payment} = require('../Models/Models')
 
 class PaymentController {
     constructor(){}

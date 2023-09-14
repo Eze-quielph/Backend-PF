@@ -1,4 +1,4 @@
-const User = require("../Models/Users.model");
+const {User} = require("../Models/Models");
 const bcrypt = require("bcrypt");
 
 class LoginController {
@@ -12,7 +12,6 @@ class LoginController {
           email: email,
         },
       });
-      console.log(user);
 
       if (!user) {
         return {

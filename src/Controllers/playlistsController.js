@@ -1,4 +1,4 @@
-const  Playlist  = require("../Models/Playlists.model");
+const  {Playlist}  = require("../Models/Models");
 const { Op } = require("sequelize");
 
 class PlaylistsController {

@@ -17,6 +17,8 @@ const {
   HTTP_STATUS_UNAUTHORIZED, */
 } = require("../Utils/statusCode");
 
+const speakeasy = require("speakeasy");
+
 class UserHandler {
   constructor() {}
 
@@ -102,11 +104,19 @@ class UserHandler {
         }
       }
 
+      const secret = speakeasy.generateSecret({ length: 20 });
+      const otpUri = speakeasy.otpauthURL({
+        secret: secret.ascii,
+        label: "backend-pf",
+        issuer: "backend-pf",
+      })
+
       const newUser = await userController.postUser(
         username,
         email,
         password,
-        newImage
+        newImage,
+        secret.ascii
       );
 
       if (newUser.existing == true)
@@ -114,7 +124,7 @@ class UserHandler {
           .status(HTTP_STATUS_INTERNAL_SERVER_ERROR)
           .json({ error: newUser.message });
       else {
-        await mailer.sendNewUser(email);
+        await mailer.sendNewUser(email, otpUri);
         res.status(HTTP_STATUS_OK).json({ data: newUser });
       }
     } catch (error) {
