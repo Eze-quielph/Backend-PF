@@ -1,4 +1,4 @@
-const User = require("../Models/Users.model");
+const {User} = require("../Models/Models");
 const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 const mailer = require("../Services/nodemailer/Mailer");

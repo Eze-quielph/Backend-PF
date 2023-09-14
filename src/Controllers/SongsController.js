@@ -1,4 +1,4 @@
-const Song = require("../Models/Songs.model");
+const {Song} = require("../Models/Models");
 const { Op } = require("sequelize");
 
 class SongsControllers {
