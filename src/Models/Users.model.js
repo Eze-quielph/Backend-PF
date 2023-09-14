@@ -1,5 +1,5 @@
 const { DataTypes, Model } = require("sequelize");
-const {sequelize} = require('../../index'); // Asegúrate de que la ruta sea correcta
+const sequelize = require('../sequelize');
 
 class User extends Model {
   static initModel(sequelize) {

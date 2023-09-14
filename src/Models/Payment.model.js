@@ -1,4 +1,4 @@
-const { sequelize } = require('../../index')
+const  sequelize  = require('../sequelize')
 const {DataTypes, Model} = require("sequelize")
 
 class Payment extends Model {
