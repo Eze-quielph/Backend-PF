@@ -30,19 +30,18 @@ class LiveChat {
   }
 
   async saveMessage(data) {
-    const chat = new Chat({
-      username: data.from,
-      data: data.body,
-    });
-    await chat
-      .save()
-      .then((result) => {
-        console.info("todo ok ", result);
-      })
-      .catch((err) => {
-        console.warn("error: ", err);
+    try {
+      const chat = new Chat({
+        username: data.from,
+        data: data.body,
       });
+      const result = await chat.save();
+      console.info("Mensaje guardado correctamente:", result);
+    } catch (error) {
+      console.error("Error al guardar el mensaje:", error);
+    }
   }
+  
 
   async getThreeDaysChat() {
     const day = new Date();
