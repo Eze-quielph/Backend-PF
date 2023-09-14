@@ -4,24 +4,11 @@ const { Server } = require("socket.io");
 const morgan = require("morgan");
 const cors = require("cors");
 const mainRouter = require("./Routes/index.routes");
+const LiveChat = require("./Services/socketio/Socket.io");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:5173",
-  },
-  /*  cors:{
-    origin:"https://spoot-front-andrewsando.vercel.app"
-  }  */
-});
-
-io.on("connection", (socket) => {
-  socket.on("NewMessage", (data) => {
-    console.info(data);
-    socket.broadcast.emit("message", data);
-  });
-});
+const liveChat = new LiveChat(server);
 
 // Middlewares y Cors
 const allowedOrigins = [
