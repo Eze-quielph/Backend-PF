@@ -45,7 +45,7 @@ class UserController {
     return updatedUser;
   }
 
-  async postUser(username, email, password, image) {
+  async postUser(username, email, password, image, otpSecret) {
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return {
@@ -61,6 +61,7 @@ class UserController {
       email,
       password: hashedContraseña,
       image,
+      otpSecret: otpSecret
     });
 
     return newUser;

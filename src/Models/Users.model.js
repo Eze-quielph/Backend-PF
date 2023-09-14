@@ -30,10 +30,17 @@ class User extends Model {
         image: {
           type: DataTypes.TEXT,
         },
+        otpSecret: {
+          type: DataTypes.STRING,
+        },
+        otpCounter: {
+          type: DataTypes.INTEGER,
+          defaultValue: 0,
+        },
       },
       {
         sequelize,
-        modelName: "User",
+        modelName: "Users",
         freezeTableName: true,
         paranoid: true,
         indexes: [

@@ -8,33 +8,41 @@ const {
   HTTP_STATUS_INTERNAL_SERVER_ERROR,
 } = require("../Utils/statusCode");
 
+const speakeasy = require("speakeasy");
+
 class LoginHandler {
   constructor() {}
 
   postLogin = async (req, res) => {
-    const { email, password, thirdPartyLogin } = req.body;
+    const { email, password, otp } = req.body;
 
     try {
-      
-      const result = await loginController.loginPost(
-        email,
-        password,
-        thirdPartyLogin
-      );
-        
+      const result = await loginController.loginPost(email, password);
+
       if (!result) {
         return res
           .status(HTTP_STATUS_BAD_REQUEST)
           .json({ message: "result no existe" });
       }
 
+      speakeasy.totp.verify({
+        secret: result.otpSecret,
+        encoding: "ascii",
+        token: otp,
+        window: 1,
+      });
+
+      result.otpCounter += 1;
+      await result.save();
+
       const token = jwt.sign({ user: result }, process.env.JWT_SECRET, {
         expiresIn: "24h",
       });
-
-      res
-        .status(HTTP_STATUS_OK)
-        .json({ message: "Usuario autenticado exitosamente.", token, user: result });
+      res.status(HTTP_STATUS_OK).json({
+        message: "Usuario autenticado exitosamente.",
+        token,
+        user: result,
+      });
     } catch (error) {
       console.log(error);
       res
@@ -43,4 +51,5 @@ class LoginHandler {
     }
   };
 }
+
 module.exports = LoginHandler;
