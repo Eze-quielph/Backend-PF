@@ -1,4 +1,4 @@
-const {User} = require("../Models/Models");
+const { User } = require("../Models/Models");
 const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 const mailer = require("../Services/nodemailer/Mailer");
@@ -61,7 +61,7 @@ class UserController {
       email,
       password: hashedContraseña,
       image,
-      otpSecret: otpSecret
+      otpSecret: otpSecret,
     });
 
     return newUser;
@@ -102,6 +102,7 @@ class UserController {
       return { message: "no existe un usuario con ese ID" };
     }
     const premium = await user.update({ premium: true });
+    console.log(premium);
 
     await mailer.sendPremiumUser(user.dataValues.email);
     console.log(premium);
@@ -113,15 +114,15 @@ class UserController {
       if (!user) {
         return { message: "no existe un usuario con ese ID" };
       }
-      
+
       const hashPassword = await bcrypt.hash(password, 8);
-   
+
       await user.update({ password: hashPassword });
-      console.info(user)
+      console.info(user);
       return {
         result: true,
         message: "Password actualizada correctamente",
-        email: user.dataValues.email
+        email: user.dataValues.email,
       };
     } catch (error) {
       return {
