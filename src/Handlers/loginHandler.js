@@ -33,7 +33,6 @@ class LoginHandler {
       });
 
       result.otpCounter += 1;
-      await result.save();
 
       const token = jwt.sign({ user: result }, process.env.JWT_SECRET, {
         expiresIn: "24h",
