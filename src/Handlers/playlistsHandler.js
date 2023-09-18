@@ -77,12 +77,11 @@ class PlaylistsHandler {
   };
 
   postPlaylist = async (req, res) => {
-    const { name, description, image } = req.body;
+    const { name, description } = req.body;
     try {
       const newPlaylist = await playlistsController.postPlaylist(
         name,
         description,
-        image
       );
       if (!newPlaylist) throw new Error("Playlist couldn't be created");
       res.status(HTTP_STATUS_OK).json(newPlaylist);
@@ -106,13 +105,12 @@ class PlaylistsHandler {
 
   putPlaylist = async (req, res) => {
     const { id } = req.params;
-    const { name, description, image } = req.body;
+    const { name, description } = req.body;
     try {
       const editedPlaylist = await playlistsController.putPlaylist(
         name,
         description,
         id,
-        image
       );
       if (!editedPlaylist) throw new Error("Playlist couldn't be modified");
       res.status(HTTP_STATUS_OK).json(editedPlaylist);

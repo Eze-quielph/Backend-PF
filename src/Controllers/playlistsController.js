@@ -36,11 +36,11 @@ class PlaylistsController {
     return playlistByName;
   };
 
-  postPlaylist = async (name, description, image) => {
+  postPlaylist = async (name, description) => {
     const find = await Playlist.findAll({
       where: { name: { [Op.iLike]: name } }});
     if (!find.length) {
-      const createdPlaylist = await Playlist.create({ name, description, image });
+      const createdPlaylist = await Playlist.create({ name, description });
       return createdPlaylist;
     }
   };
@@ -52,13 +52,12 @@ class PlaylistsController {
     return playlist;
   };
 
-  putPlaylist = async (name, description, id, image) => {
+  putPlaylist = async (name, description, id) => {
     const playlist = await Playlist.findByPk(id);
 
     await Playlist.update({
       name: name,
       description: description,
-      image: image,
     });
 
     return playlist;

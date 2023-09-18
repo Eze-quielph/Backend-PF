@@ -18,9 +18,6 @@ class Playlist extends Model {
           type: DataTypes.STRING,
           allowNull: false,
         },
-        image: {
-          type: DataTypes.TEXT,
-        },
         isActive: {
           type: DataTypes.BOOLEAN,
         },
