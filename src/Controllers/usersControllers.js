@@ -13,6 +13,7 @@ class UserController {
 
   getUserByName = async (username, page, perPage) => {
     try {
+      console.log("Username Controller: ",username)
       const databaseUser = await User.findAll({
         where: {
           username: { [Op.iLike]: `%${username}%` },
@@ -21,6 +22,7 @@ class UserController {
         limit: perPage,
       });
 
+      console.info("Database user: ",databaseUser)
       if (!databaseUser || databaseUser.length === 0) {
         throw new Error("No existe usuario con ese nombre");
       }
@@ -108,9 +110,11 @@ class UserController {
     console.log(premium);
   }
 
-  async returnPassword(userId, password) {
+  async returnPassword(email, password) {
     try {
-      const user = await User.findByPk(userId);
+      const user = await User.findOne({ where: {
+        email:email
+      }});
       if (!user) {
         return { message: "no existe un usuario con ese ID" };
       }

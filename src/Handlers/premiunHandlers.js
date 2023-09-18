@@ -15,12 +15,12 @@ class PremiunHandler {
   async getMensual(req, res) {
     const { userId } = req.query;
     try {
-      console.log(userId);
+      
       const idUnico = generarIdUnico();
       const preference = await mercadopago.paymentMensual(idUnico);
-      console.log("preference: ", preference);
+     
       const result = await paymentController.createPayment(userId, idUnico);
-      console.log(result);
+     
       res.json({redirect:preference.body.init_point});
     } catch (error) {
       console.error("Error al generar la preferencia de pago mensual:", error);
@@ -31,16 +31,15 @@ class PremiunHandler {
   async getAnual(req, res) {
     const { userId } = req.query;
     try {
-      const idUnico = generarIdUnico()
       
+      const idUnico = generarIdUnico();
       const preference = await mercadopago.paymentAnual(idUnico);
-    
+     
       const result = await paymentController.createPayment(userId, idUnico);
-
-    
-      res.redirect(preference.body.init_point);
+     
+      res.json({redirect:preference.body.init_point});
     } catch (error) {
-      console.error("Error al generar la preferencia de pago anual:", error);
+      console.error("Error al generar la preferencia de pago mensual:", error);
       res.status(500).send("Error al procesar la solicitud");
     }
   }
