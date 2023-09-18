@@ -18,8 +18,9 @@ const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
 //Routes
+usersRouter.put("/password", userHandler.returnPassword)
 usersRouter.get("/",  validateTokenMiddleware, userHandler.getUsers);
-usersRouter.get("/name", validateTokenMiddleware, validateNameMiddleware, userHandler.getUsers);
+usersRouter.get("/name", validateTokenMiddleware, validateNameMiddleware, userHandler.getUsersName);
 usersRouter.get("/:id",validateTokenMiddleware, validateIdMiddleware, userHandler.getUserById);
 usersRouter.delete("/:id", validateTokenMiddleware,validateIdMiddleware, userHandler.deleteUser);
 usersRouter.post("/login", loginHandler.postLogin)
@@ -38,6 +39,5 @@ usersRouter.put(
   userHandler.putUser
 );
 usersRouter.get('/restore/:id', validateIdMiddleware, userHandler.restoreUserById);
-usersRouter.put("/restorePassword/:id", validateIdMiddleware, userHandler.returnPassword)
 
 module.exports = usersRouter;
