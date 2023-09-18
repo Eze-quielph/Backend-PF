@@ -142,33 +142,43 @@ class SongsHandler {
   postSound = async (req, res) => {
     const { name, description, artist, genre } = req.body;
 
-    try {
-      const uploadedImage = await uploadFIle.uploadImage(
-        req.files.image[0].path
-      );
-      const uploadedSound = await uploadFIle.uploadSound(
-        req.files.sound[0].path
-      );
+    const usuario = req.user;
+    // res.json({ mensaje: "Usuario actual:", usuario });
+    //console.log(usuario.user.premium);
+    //console.log(typeof usuario.user.premium);
+    if (usuario.user.premium) {
+      try {
+        const uploadedImage = await uploadFIle.uploadImage(
+          req.files.image[0].path
+        );
+        const uploadedSound = await uploadFIle.uploadSound(
+          req.files.sound[0].path
+        );
 
-      const image = uploadedImage;
-      const song = uploadedSound;
+        const image = uploadedImage;
+        const song = uploadedSound;
 
-      const result = await songController.postSong(
-        name,
-        description,
-        artist,
-        genre,
-        image,
-        song
-      );
+        const result = await songController.postSong(
+          name,
+          description,
+          artist,
+          genre,
+          image,
+          song
+        );
 
-      if (result.error) {
-        res.status(HTTP_STATUS_BAD_REQUEST).json({ error: result.error });
-      } else {
-        res.status(HTTP_STATUS_OK).json({ result: result });
+        if (result.error) {
+          res.status(HTTP_STATUS_BAD_REQUEST).json({ error: result.error });
+        } else {
+          res.status(HTTP_STATUS_OK).json({ result: result });
+        }
+      } catch (error) {
+        res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
       }
-    } catch (error) {
-      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
+    } else {
+      res
+        .status(HTTP_STATUS_BAD_REQUEST)
+        .json({ error: "Usuario no es premium" });
     }
   };
 
@@ -217,7 +227,7 @@ class SongsHandler {
   async pointSong(req, res) {
     const { id } = req.params;
     const { points } = req.query;
-    
+
     try {
       const result = await songController.pointSong(id, points);
       if (result.message) {

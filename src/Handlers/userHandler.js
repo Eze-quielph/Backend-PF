@@ -50,6 +50,7 @@ class UserHandler {
     const perPage = parseInt(req.query.perPage) || 5;
     let result;
     try {
+      console.info("username handler: ", username)
       await client.get(`${username}`, (err, reply) => {
         if (reply) {
           result = JSON.parse(reply);
@@ -58,6 +59,7 @@ class UserHandler {
         console.log(err);
       });
       result = await userController.getUserByName(username, page, perPage);
+      console.info("result final handler: ", result)
       if (!result) throw new Error("No se encontro los datos");
       await client.setEx(`${username}`, 15000, JSON.stringify(result));
       res.status(HTTP_STATUS_OK).json({ result: result });
@@ -185,19 +187,20 @@ class UserHandler {
     }
   }
   async returnPassword(req, res) {
-    const { id } = req.params;
-    const { password } = req.query;
-
+    const { email, password } = req.query;
+  
     try {
       if (!password) {
         return res
           .status(HTTP_STATUS_BAD_REQUEST)
           .json({ status: "false", message: "No enviaste el password" });
       }
-      const result = await userController.returnPassword(id, password);
-      if (result.result == false && result.error)
+  
+      const result = await userController.returnPassword(email, password);
+  
+      if (result.result == false || result.error) {
         res.status(HTTP_STATUS_BAD_REQUEST).json({ result: result });
-      else {
+      } else {
         console.info(result);
         await mailer.updatePassword(result.email);
         res.status(HTTP_STATUS_OK).json({ result: result });
@@ -206,6 +209,8 @@ class UserHandler {
       res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
     }
   }
+  
+  
 }
 
 module.exports = UserHandler;
