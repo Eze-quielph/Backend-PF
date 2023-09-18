@@ -98,17 +98,25 @@ class UserController {
     }
   }
 
-  async userPremiun(userId) {
-    const user = await User.findByPk(userId);
-    if (!user) {
-      return { message: "no existe un usuario con ese ID" };
-    }
-    const premium = await user.update({ premium: true });
-    console.log(premium);
+  async userPremium(userId) {
+    try {
+      const user = await User.findByPk(userId);
+      if (!user) {
+        return { message: "No existe un usuario con ese ID" };
+      }
 
-    await mailer.sendPremiumUser(user.dataValues.email);
-    console.log(premium);
+      user.premium = true;
+      await user.save();
+
+      await mailer.sendPremiumUser(user.email);
+
+      return { message: "Usuario actualizado a premium exitosamente" };
+    } catch (error) {
+      console.error(error);
+      return { message: "Ocurrió un error al actualizar el usuario a premium" };
+    }
   }
+  
 
   async returnPassword(email, password) {
     try {
