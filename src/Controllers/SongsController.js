@@ -190,21 +190,29 @@ class SongsControllers {
     try {
       console.log(point);
       const existing = await Song.findByPk(id);
-      if (point > 5)
+  
+      if (!existing) {
         return {
-          message: "Point no puede ser mayor a 5",
+          message: "No existe canción con ese id",
         };
-      if (!existing)
+      }
+  
+      if (+point !== undefined && (typeof +point !== 'number' || +point < 0 || +point > 5)) {
         return {
-          message: "No existe cancion con ese id",
+          message: "El punto debe ser un número entre 0 y 5",
         };
-      console.log(existing.dataValues);
-      if (point) existing.dataValues.Points = point;
-
-      const data = await existing.save();
-      return data;
+      }
+  
+      if (+point !== undefined) {
+        existing.setDataValue('Points', +point);
+        await existing.save();
+      }
+  
+      return existing;
     } catch (error) {
-      return error;
+      // Puedes registrar el error o lanzar una excepción personalizada aquí
+      console.error(error);
+      throw new Error("Ocurrió un error al actualizar la canción.");
     }
   }
 }
