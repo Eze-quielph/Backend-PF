@@ -19,16 +19,10 @@ class LoginHandler {
     try {
       const result = await loginController.loginPost(email, password);
 
-      if (result.error === "Usuario no encontrado") {
+      if (!result) {
         return res
           .status(HTTP_STATUS_BAD_REQUEST)
-          .json({ error: result.error });
-      }
-
-      if (result.error === "Parámetros no coinciden ") {
-        return res
-          .status(HTTP_STATUS_BAD_REQUEST)
-          .json({ error: result.error });
+          .json({ message: "result no existe" });
       }
 
       speakeasy.totp.verify({

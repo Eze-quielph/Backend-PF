@@ -1,4 +1,4 @@
-const  {Playlist, Song}  = require("../Models/Models");
+const  {Playlist}  = require("../Models/Models");
 const { Op } = require("sequelize");
 
 class PlaylistsController {
@@ -13,12 +13,7 @@ class PlaylistsController {
   };
 
   getPlaylistById = async (id) => {
-    const playlistById = await Playlist.findByPk(id, {
-      include: {
-        model: Song,
-        through: { attributes: [] },
-      },
-    });
+    const playlistById = await Playlist.findByPk(id);
     return playlistById;
   };
 
@@ -27,46 +22,22 @@ class PlaylistsController {
       where: { name: { [Op.iLike]: `%${name}%` } },
       offset: (page - 1) * perPage,
       limit: perPage,
-    }, {
-      include: {
-        model: Song,
-        through: { attributes: [] },
-      },
     });
     return playlistByName;
   };
 
   postPlaylist = async (name, description) => {
-    const find = await Playlist.findAll({
-      where: { name: { [Op.iLike]: name } }});
-    if (!find.length) {
-      const createdPlaylist = await Playlist.create({ name, description });
-      return createdPlaylist;
-    }
-  };
-  
-  postSongToPlaylist = async (songId, playlistId) => {
-    const song = await Song.findByPk(songId);
-    const playlist = await Playlist.findByPk(playlistId);
-    await playlist.addSong(song);
-    return playlist;
+    return await Playlist.create({ name, description });
   };
 
   putPlaylist = async (name, description, id) => {
     const playlist = await Playlist.findByPk(id);
 
-    await Playlist.update({
+    Playlist.update({
       name: name,
       description: description,
     });
 
-    return playlist;
-  };
-
-  putSongFromPlaylist = async (songId, playlistId) => {
-    const song = await Song.findByPk(songId);
-    const playlist = await Playlist.findByPk(playlistId);
-    await playlist.removeSong(song);
     return playlist;
   };
 
