@@ -14,9 +14,7 @@ playlistsRouter.get("/", playlistsHandler.getPlaylists);
 playlistsRouter.get("/:id", validateIdMiddleware, playlistsHandler.getPlaylistById);
 playlistsRouter.get("/name", validateNameMiddleware, playlistsHandler.getPlaylistByName);
 playlistsRouter.post("/", validateItems, playlistsHandler.postPlaylist);
-playlistsRouter.post("/add", playlistsHandler.postSongToPlaylist);
-playlistsRouter.put("/remove", playlistsHandler.putSongFromPlaylist);
-playlistsRouter.put("/:id", validateIdMiddleware, validateItems, playlistsHandler.putPlaylist);
+playlistsRouter.put("/:id", validateIdMiddleware, validateItems,  playlistsHandler.putPlaylist);
 playlistsRouter.delete("/:id", validateIdMiddleware, playlistsHandler.deletePlaylist);
 
 module.exports = playlistsRouter;
