@@ -90,6 +90,19 @@ class PlaylistsHandler {
     }
   };
 
+  postSongToPlaylist = async (req, res) => {
+    const { songId, playlistId } = req.body;
+    try {
+      const addedSong = await playlistsController.postSongToPlaylist(
+        songId, playlistId
+      );
+      if (!addedSong) throw new Error("Song couldn't be added to the playlist");
+      res.status(HTTP_STATUS_OK).json(addedSong);
+    } catch (error) {
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
+    }
+  };
+
   putPlaylist = async (req, res) => {
     const { id } = req.params;
     const { name, description } = req.body;
@@ -106,6 +119,19 @@ class PlaylistsHandler {
     }
   };
 
+  putSongFromPlaylist = async (req, res) => {
+    const { songId, playlistId } = req.body;
+    try {
+      const removedSong = await playlistsController.putSongFromPlaylist(
+        songId, playlistId
+      );
+      if (!removedSong) throw new Error("Song couldn't be removed from the playlist");
+      res.status(HTTP_STATUS_OK).json(removedSong);
+    } catch (error) {
+      res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error.message });
+    }
+  };
+  
   deletePlaylist = async (req, res) => {
     const { id } = req.params;
     try {
