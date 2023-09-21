@@ -18,8 +18,8 @@ class Mercadopago {
       },
     ],
     back_urls: {
-      success: "https://spoot-front-andrewsando.vercel.app/premium-success",
-      failure: "https://spoot-front-andrewsando.vercel.app/premium-fail",
+      success: "https://spoot-front.vercel.app//premium-success",
+      failure: "https://spoot-front.vercel.app/premium-fail",
     },
     notification_url:
       "https://backend-pf-production-ba15.up.railway.app/premium/webhook",
@@ -36,8 +36,8 @@ class Mercadopago {
       },
     ],
     back_urls: {
-      success: "https://spoot-front-andrewsando.vercel.app/premium-success",
-      failure: "https://spoot-front-andrewsando.vercel.app/premium-fail",
+      success: "https://spoot-front.vercel.app/premium-success",
+      failure: "https://spoot-front.vercel.app/premium-fail",
     },
     notification_url:
       "https://backend-pf-production-ba15.up.railway.app/premium/webhook",
