@@ -16,7 +16,6 @@ class Song extends Model {
         },
         song: {
           type: DataTypes.TEXT,
-          unique: true,
           allowNull: false,
         },
         description: {
