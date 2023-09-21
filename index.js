@@ -10,7 +10,7 @@ const sequelize  = require("./src/sequelize");
 const PORT = process.env.PORT ?? 3001;
 
 sequelize
-  .sync({ alter: true }) 
+  .sync({ force: true }) 
   .then(() => {
     console.log("Modelos sincronizados con la base de datos.");
 
