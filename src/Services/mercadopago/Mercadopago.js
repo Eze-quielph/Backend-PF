@@ -36,7 +36,7 @@ class Mercadopago {
       },
     ],
     back_urls: {
-       success: "https://spoot-front-andrewsando.vercel.app/premium-success",
+      success: "https://spoot-front-andrewsando.vercel.app/premium-success",
       failure: "https://spoot-front-andrewsando.vercel.app/premium-fail",
     },
     notification_url:
