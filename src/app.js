@@ -25,8 +25,8 @@ const corsOptions = {
 
 app.use(cors());
 app.disable("x-powered-by");
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({limit: '50mb', extended: true	}));
+app.use(express.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
 app.use(morgan("dev"));
 
 // Rutas
